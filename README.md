@@ -10,4 +10,7 @@ A example to deploy `fdb-prometheus-exporter` on Kubernetes is available. It has
 ```bash
 # After deploying the sample-cluster
 kubectl apply -f ./deployment/kubernetes/fdb-metrics-pod.yaml
+
+# To destroy it
+kubectl delete -f ./deployment/kubernetes/fdb-metrics-pod.yaml
 ```

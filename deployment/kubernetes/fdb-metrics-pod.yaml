@@ -4,8 +4,9 @@ metadata:
   name: fdb-prometheus-exporter
 spec:
   containers:
-    - image: pierrezemb/fdb-prometheus-exporter
+    - image: pierrezemb/fdb-prometheus-exporter:latest
       name: fdb-prometheus-exporter
+      imagePullPolicy: always
       ports:
         - containerPort: 8080
           name: http

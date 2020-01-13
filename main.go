@@ -26,15 +26,18 @@ func main() {
 	// Different API versions may expose different runtime behaviors.
 	fdb.MustAPIVersion(apiVersion)
 
+	clusterFile := getEnv("FDB_CLUSTER_FILE", "/var/fdb/data/fdb.cluster")
+	fmt.Println("opening cluster file at", clusterFile)
+
 	// Open the default database from the system cluster
-	db = fdb.MustOpenDatabase(getEnv("FDB_CLUSTER_FILE", "/var/fdb/data/fdb.cluster"))
+	db = fdb.MustOpenDatabase(clusterFile)
 
 	exportWorkload, err := strconv.ParseBool(getEnv("FDB_EXPORT_WORKLOAD", "true"))
 	if err != nil {
 		log.Fatal("cannot parse FDB_EXPORT_WORLOAD from env")
 	}
 
-	listenTo := getEnv("FDB_METRICS_LISTEN", ":8081")
+	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
 	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "1"))
 	if err != nil {
 		log.Fatal("cannot parse FDB_METRICS_EVERY from env")
@@ -42,7 +45,7 @@ func main() {
 
 	ticker := time.NewTicker(time.Duration(refreshEvery) * time.Second)
 	go func() {
-		for _ = range ticker.C {
+		for range ticker.C {
 			//Call the periodic function here.
 			models, err := retrieveMetrics()
 			if err != nil {
