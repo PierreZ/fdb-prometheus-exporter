@@ -20,14 +20,8 @@ import (
 )
 
 var (
-	db                   fdb.Database
-	jsonKey              = append([]byte{255, 255}, []byte("/status/json")...)
-	transactionHistogram = prometheus.NewHistogram(
-		prometheus.HistogramOpts{
-			Name:    "fdb_retrieve_metrics_duration",
-			Help:    "retrieve metrics duration distribution",
-			Buckets: []float64{1, 2, 5, 10, 20, 60},
-		})
+	db      fdb.Database
+	jsonKey = append([]byte{255, 255}, []byte("/status/json")...)
 )
 
 func main() {
@@ -68,6 +62,10 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot parse FDB_EXPORT_CONFIGURATION from env")
 	}
+	exportProcesses, err := strconv.ParseBool(getEnv("FDB_EXPORT_PROCESSES", "true"))
+	if err != nil {
+		log.Fatal("cannot parse FDB_EXPORT_PROCESSES from env")
+	}
 
 	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
 	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "10"))
@@ -98,6 +96,10 @@ func main() {
 			if exportConfiguration {
 				models.ExportConfiguration()
 			}
+
+			if exportProcesses {
+				models.ExportProcesses()
+			}
 		}
 	}()
 
@@ -113,19 +115,14 @@ func main() {
 }
 
 func retrieveMetrics() (*models.FDBStatus, error) {
-	fmt.Println("refreshing metrics")
 
-	start := time.Now()
 	jsonRaw, err := db.ReadTransact(func(tr fdb.ReadTransaction) (interface{}, error) {
 		return tr.Get(fdb.Key(jsonKey)).Get()
 	})
-	duration := time.Since(start)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot get status")
 	}
-
-	transactionHistogram.Observe(duration.Seconds())
 
 	var status models.FDBStatus
 	err = json.NewDecoder(bytes.NewReader(jsonRaw.([]byte))).Decode(&status)

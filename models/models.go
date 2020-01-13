@@ -368,4 +368,5 @@ func Register(r *prometheus.Registry) {
 	registerWorkload(r)
 	registerDatabaseStatus(r)
 	registerConfiguration(r)
+	registerProcesses(r)
 }
