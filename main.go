@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/PierreZ/fdb-prometheus-exporter/models"
 	"github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -33,30 +34,36 @@ func main() {
 		log.Fatal("cannot parse FDB_EXPORT_WORLOAD from env")
 	}
 
-	ticker := time.NewTicker(2 * time.Second)
+	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
+	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "60"))
+	if err != nil {
+		log.Fatal("cannot parse FDB_METRICS_EVERY from env")
+	}
+
+	ticker := time.NewTicker(time.Duration(refreshEvery) * time.Second)
 	go func() {
 		for t := range ticker.C {
 			//Call the periodic function here.
-			status, err := retrieveMetrics(t)
+			models, err := retrieveMetrics(t)
 			if err != nil {
 				fmt.Errorf("cannot retrieve metrics from FDB: (%v)", err)
 			}
 
 			if exportWorkload {
-				status.exportWorkload()
+				models.ExportWorkload()
 			}
 		}
 	}()
 
 	// Expose the registered metrics via HTTP.
 	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(listenTo, nil))
 }
 
-func retrieveMetrics(tick time.Time) (*FDBStatus, error) {
+func retrieveMetrics(tick time.Time) (*models.FDBStatus, error) {
 	fmt.Println("refreshing metrics", tick)
-	status, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
-		keyCode := []byte("\xff\xff/status/json")
+	rawStatus, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
+		keyCode := []byte("\xff\xff/models/json")
 		var k fdb.Key
 		k = keyCode
 		resp, err := tr.Get(k).Get()
@@ -64,23 +71,23 @@ func retrieveMetrics(tick time.Time) (*FDBStatus, error) {
 			return nil, errors.Wrap(err, "cannot retrieve key")
 		}
 		if len(resp) == 0 {
-			return nil, errors.Wrap(err, "no key for status")
+			return nil, errors.Wrap(err, "no key for models")
 		}
 
-		status := FDBStatus{}
-		err = json.Unmarshal(resp, &status)
+		fdbStatus := models.FDBStatus{}
+		err = json.Unmarshal(resp, &fdbStatus)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot unmarshal key")
 		}
 
-		return &status, nil
+		return &fdbStatus, nil
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	fdbStatus := status.(FDBStatus)
+	fdbStatus := rawStatus.(models.FDBStatus)
 	return &fdbStatus, nil
 }
 

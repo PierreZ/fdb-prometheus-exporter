@@ -1,0 +1,47 @@
+package models
+
+import (
+	"fmt"
+
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+var (
+	workloadOperationHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_workload_operations_per_second",
+		Help: "operations per second",
+	}, []string{"operation", "unit"})
+
+	workloadOperationCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_workload_operations_total",
+		Help: "Gauge of operations",
+	}, []string{"operation", "unit"})
+)
+
+// ExportWorkload is exporting workloads
+func (s FDBStatus) ExportWorkload() {
+
+	workloadOperationHZ.With(prometheus.Labels{
+		"operation": "writes",
+		"unit":      "hz",
+	}).Set(s.Cluster.Workload.Operations.Reads.Hz)
+	workloadOperationHZ.With(prometheus.Labels{
+		"operation": "reads",
+		"unit":      "hz",
+	}).Set(s.Cluster.Workload.Operations.Writes.Hz)
+
+	workloadOperationCounter.With(prometheus.Labels{
+		"operation": "writes",
+		"unit":      "hz",
+	}).Set(s.Cluster.Workload.Operations.Reads.Counter)
+	workloadOperationCounter.With(prometheus.Labels{
+		"operation": "reads",
+		"unit":      "hz",
+	}).Set(s.Cluster.Workload.Operations.Writes.Counter)
+}
+
+func init() {
+	prometheus.MustRegister(workloadOperationHZ)
+	prometheus.MustRegister(workloadOperationCounter)
+	fmt.Println("registered workload metrics")
+}

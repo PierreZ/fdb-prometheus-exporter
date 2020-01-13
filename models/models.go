@@ -1,4 +1,4 @@
-package main
+package models 
 
 // FDBStatus represent the status of a Cluster
 type FDBStatus struct {
@@ -127,17 +127,17 @@ type FDBClusterStatus struct {
 		} `json:"keys"`
 		Operations struct {
 			ReadRequests struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"read_requests"`
 			Reads struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"reads"`
 			Writes struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"writes"`
@@ -353,4 +353,3 @@ type FDBClusterProcessStatus struct {
 	UptimeSeconds float64 `json:"uptime_seconds"`
 	Version       string  `json:"version"`
 }
-
