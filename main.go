@@ -104,7 +104,6 @@ func main() {
 	}()
 
 	r := prometheus.NewRegistry()
-	r.MustRegister(transactionHistogram)
 	models.Register(r)
 
 	// [...] update metrics within a goroutine
