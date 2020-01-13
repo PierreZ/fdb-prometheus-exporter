@@ -1,4 +1,4 @@
-package models 
+package models
 
 // FDBStatus represent the status of a Cluster
 type FDBStatus struct {
@@ -144,17 +144,17 @@ type FDBClusterStatus struct {
 		} `json:"operations"`
 		Transactions struct {
 			Committed struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"committed"`
 			Conflicted struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"conflicted"`
 			Started struct {
-				Counter   int     `json:"counter"`
+				Counter   float64 `json:"counter"`
 				Hz        float64 `json:"hz"`
 				Roughness float64 `json:"roughness"`
 			} `json:"started"`

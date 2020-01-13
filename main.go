@@ -42,7 +42,7 @@ func main() {
 	fmt.Println("opening cluster file at", clusterFile)
 	dat, err := ioutil.ReadFile(clusterFile)
 	if err != nil {
-		log.Fatalf("cannot read cluster file")
+		log.Fatalf("cannot read cluster file: %+v", err)
 	}
 	fmt.Println(string(dat))
 

@@ -1,6 +1,29 @@
 # fdb-prometheus-exporter  [![Docker Pulls](https://img.shields.io/docker/pulls/pierrezemb/fdb-prometheus-exporter.svg?style=plastic)](https://hub.docker.com/r/pierrezemb/fdb-prometheus-exporter/) ![go build](https://github.com/PierreZ/fdb-prometheus-exporter/workflows/Build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/PierreZ/fdb-prometheus-exporter)](https://goreportcard.com/report/github.com/PierreZ/fdb-prometheus-exporter) [![GoDoc](https://godoc.org/github.com/PierreZ/fdb-prometheus-exporter?status.svg)](https://godoc.org/github.com/PierreZ/fdb-prometheus-exporter)
 A FoundationDB Prometheus metrics exporter
 
+## Building
+
+### Requirements
+
+* go >= 1.13
+
+```bash
+git clone git@github.com:PierreZ/fdb-prometheus-exporter.git
+
+go install
+```
+
+## Using it
+
+`fdb-prometheus-exporter` is env-var driven, you can customize:
+
+* `FDB_API_VERSION`
+* `FDB_CLUSTER_FILE`
+* `FDB_CREATE_CLUSTER_FILE`
+* `FDB_EXPORT_WORKLOAD`
+* `FDB_METRICS_LISTEN`
+* `FDB_METRICS_EVERY`
+
 ## Deployments
 
 ### Docker-Compose
