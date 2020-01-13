@@ -73,8 +73,7 @@ func (s FDBStatus) ExportWorkload() {
 	}).Set(s.Cluster.Workload.Transactions.Started.Counter)
 }
 
-// Register is registering metrics
-func Register(r *prometheus.Registry) {
+func registerWorkload(r *prometheus.Registry) {
 	r.MustRegister(workloadOperationHZ)
 	r.MustRegister(workloadOperationCounter)
 	r.MustRegister(workloadTransactionHZ)

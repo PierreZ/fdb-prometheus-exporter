@@ -53,6 +53,10 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot parse FDB_EXPORT_WORLOAD from env")
 	}
+	exportDatabaseStatus, err := strconv.ParseBool(getEnv("FDB_EXPORT_DATABASE_STTATUS", "true"))
+	if err != nil {
+		log.Fatal("cannot parse FDB_DATABASE_STATUS from env")
+	}
 
 	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
 	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "10"))
@@ -74,6 +78,10 @@ func main() {
 
 			if exportWorkload {
 				models.ExportWorkload()
+			}
+
+			if exportDatabaseStatus {
+				models.ExportDatabaseStatus()
 			}
 		}
 	}()

@@ -1,5 +1,7 @@
 package models
 
+import "github.com/prometheus/client_golang/prometheus"
+
 // FDBStatus represent the status of a Cluster
 type FDBStatus struct {
 	Client  FDBClientStatus  `json:"client"`
@@ -352,4 +354,17 @@ type FDBClusterProcessStatus struct {
 	RunLoopBusy   float64 `json:"run_loop_busy"`
 	UptimeSeconds float64 `json:"uptime_seconds"`
 	Version       string  `json:"version"`
+}
+
+func boolToNumber(b bool) float64 {
+	if b {
+		return 1
+	}
+	return 0
+}
+
+// Register is registering all metrics
+func Register(r *prometheus.Registry) {
+	registerWorkload(r)
+	registerDatabaseStatus(r)
 }
