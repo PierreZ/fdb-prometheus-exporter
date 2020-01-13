@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -17,7 +18,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var db fdb.Database
+var (
+	db      fdb.Database
+	jsonKey = append([]byte{255, 255}, []byte("/status/json")...)
+)
 
 func main() {
 
@@ -80,32 +84,21 @@ func main() {
 
 func retrieveMetrics() (*models.FDBStatus, error) {
 	fmt.Println("refreshing metrics")
-	rawStatus, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
-		keyCode := append([]byte{255, 255}, []byte("/status/json")...)
-		var k fdb.Key
-		k = keyCode
-		resp, err := tr.Get(k).Get()
-		if err != nil {
-			return nil, errors.Wrap(err, "cannot retrieve key")
-		}
-		if len(resp) == 0 {
-			return nil, errors.Wrap(err, "no key for models")
-		}
 
-		fdbStatus := models.FDBStatus{}
-		err = json.Unmarshal(resp, &fdbStatus)
-		if err != nil {
-			return nil, errors.Wrap(err, "cannot unmarshal key")
-		}
-		return fdbStatus, nil
+	jsonRaw, err := db.ReadTransact(func(tr fdb.ReadTransaction) (interface{}, error) {
+		return tr.Get(fdb.Key(jsonKey)).Get()
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "cannot get status")
 	}
 
-	fdbStatus := rawStatus.(models.FDBStatus)
-	return &fdbStatus, nil
+	var status models.FDBStatus
+	err = json.NewDecoder(bytes.NewReader(jsonRaw.([]byte))).Decode(&status)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot decode json")
+	}
+	return &status, nil
 }
 
 // getEnv is wrapping os.getenv with a fallback
