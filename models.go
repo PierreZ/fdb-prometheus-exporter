@@ -353,3 +353,4 @@ type FDBClusterProcessStatus struct {
 	UptimeSeconds float64 `json:"uptime_seconds"`
 	Version       string  `json:"version"`
 }
+
