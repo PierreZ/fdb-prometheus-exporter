@@ -21,6 +21,8 @@ var (
 // ExportWorkload is exporting workloads
 func (s FDBStatus) ExportWorkload() {
 
+	fmt.Println("generating workload")
+
 	workloadOperationHZ.With(prometheus.Labels{
 		"operation": "writes",
 		"unit":      "hz",

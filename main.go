@@ -34,20 +34,23 @@ func main() {
 		log.Fatal("cannot parse FDB_EXPORT_WORLOAD from env")
 	}
 
-	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
-	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "60"))
+	listenTo := getEnv("FDB_METRICS_LISTEN", ":8081")
+	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "1"))
 	if err != nil {
 		log.Fatal("cannot parse FDB_METRICS_EVERY from env")
 	}
 
 	ticker := time.NewTicker(time.Duration(refreshEvery) * time.Second)
 	go func() {
-		for t := range ticker.C {
+		for _ = range ticker.C {
 			//Call the periodic function here.
-			models, err := retrieveMetrics(t)
+			models, err := retrieveMetrics()
 			if err != nil {
 				fmt.Errorf("cannot retrieve metrics from FDB: (%v)", err)
+				continue
 			}
+
+			fmt.Println("retrieved data")
 
 			if exportWorkload {
 				models.ExportWorkload()
@@ -60,8 +63,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(listenTo, nil))
 }
 
-func retrieveMetrics(tick time.Time) (*models.FDBStatus, error) {
-	fmt.Println("refreshing metrics", tick)
+func retrieveMetrics() (*models.FDBStatus, error) {
+	fmt.Println("refreshing metrics")
 	rawStatus, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
 		keyCode := []byte("\xff\xff/models/json")
 		var k fdb.Key
@@ -79,7 +82,6 @@ func retrieveMetrics(tick time.Time) (*models.FDBStatus, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot unmarshal key")
 		}
-
 		return &fdbStatus, nil
 	})
 
