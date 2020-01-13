@@ -13,7 +13,9 @@ spec:
           protocol: TCP
       env:
         - name: FDB_CLUSTER_FILE
-          value: /mnt/config-volume/fdb.cluster
+          value: /mnt/config-volume/cluster-file
+        - name: FDB_METRICS_EVERY
+          value: "2"
       volumeMounts:
       - name: config-volume
         mountPath: /mnt/config-volume

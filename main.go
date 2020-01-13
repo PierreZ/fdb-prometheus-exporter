@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"time"
 
@@ -27,7 +29,17 @@ func main() {
 	fdb.MustAPIVersion(apiVersion)
 
 	clusterFile := getEnv("FDB_CLUSTER_FILE", "/var/fdb/data/fdb.cluster")
+
+	if _, exists := os.LookupEnv("FDB_CREATE_CLUSTER_FILE"); exists {
+		execBash()
+	}
+
 	fmt.Println("opening cluster file at", clusterFile)
+	dat, err := ioutil.ReadFile(clusterFile)
+	if err != nil {
+		log.Fatalf("cannot read cluster file")
+	}
+	fmt.Println(string(dat))
 
 	// Open the default database from the system cluster
 	db = fdb.MustOpenDatabase(clusterFile)
@@ -38,7 +50,7 @@ func main() {
 	}
 
 	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
-	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "1"))
+	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "10"))
 	if err != nil {
 		log.Fatal("cannot parse FDB_METRICS_EVERY from env")
 	}
@@ -69,7 +81,7 @@ func main() {
 func retrieveMetrics() (*models.FDBStatus, error) {
 	fmt.Println("refreshing metrics")
 	rawStatus, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
-		keyCode := []byte("\xff\xff/models/json")
+		keyCode := append([]byte{255, 255}, []byte("/status/json")...)
 		var k fdb.Key
 		k = keyCode
 		resp, err := tr.Get(k).Get()
@@ -85,7 +97,7 @@ func retrieveMetrics() (*models.FDBStatus, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot unmarshal key")
 		}
-		return &fdbStatus, nil
+		return fdbStatus, nil
 	})
 
 	if err != nil {
@@ -103,4 +115,22 @@ func getEnv(key, fallback string) string {
 		return fallback
 	}
 	return value
+}
+
+func execBash() {
+	cmd := exec.Command("/create_cluster_file.bash")
+
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Running command 'create_cluster_file' and waiting for it to finish...\n")
+	err = cmd.Run()
+	if err != nil {
+		slurp, _ := ioutil.ReadAll(stderr)
+		fmt.Printf("%s\n", slurp)
+		log.Fatalf("cannot run create_cluster_file: %v", err)
+	}
+	fmt.Println("Command finished")
 }
