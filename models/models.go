@@ -367,4 +367,5 @@ func boolToNumber(b bool) float64 {
 func Register(r *prometheus.Registry) {
 	registerWorkload(r)
 	registerDatabaseStatus(r)
+	registerConfiguration(r)
 }

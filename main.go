@@ -20,8 +20,14 @@ import (
 )
 
 var (
-	db      fdb.Database
-	jsonKey = append([]byte{255, 255}, []byte("/status/json")...)
+	db                   fdb.Database
+	jsonKey              = append([]byte{255, 255}, []byte("/status/json")...)
+	transactionHistogram = prometheus.NewHistogram(
+		prometheus.HistogramOpts{
+			Name:    "fdb_retrieve_metrics_duration",
+			Help:    "retrieve metrics duration distribution",
+			Buckets: []float64{1, 2, 5, 10, 20, 60},
+		})
 )
 
 func main() {
@@ -40,11 +46,11 @@ func main() {
 	}
 
 	fmt.Println("opening cluster file at", clusterFile)
-	dat, err := ioutil.ReadFile(clusterFile)
+	data, err := ioutil.ReadFile(clusterFile)
 	if err != nil {
 		log.Fatalf("cannot read cluster file: %+v", err)
 	}
-	fmt.Println(string(dat))
+	fmt.Println(string(data))
 
 	// Open the default database from the system cluster
 	db = fdb.MustOpenDatabase(clusterFile)
@@ -53,9 +59,14 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot parse FDB_EXPORT_WORLOAD from env")
 	}
-	exportDatabaseStatus, err := strconv.ParseBool(getEnv("FDB_EXPORT_DATABASE_STTATUS", "true"))
+	exportDatabaseStatus, err := strconv.ParseBool(getEnv("FDB_EXPORT_DATABASE_STATUS", "true"))
 	if err != nil {
-		log.Fatal("cannot parse FDB_DATABASE_STATUS from env")
+		log.Fatal("cannot parse FDB_EXPORT_DATABASE_STATUS from env")
+	}
+
+	exportConfiguration, err := strconv.ParseBool(getEnv("FDB_EXPORT_CONFIGURATION", "true"))
+	if err != nil {
+		log.Fatal("cannot parse FDB_EXPORT_CONFIGURATION from env")
 	}
 
 	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
@@ -83,10 +94,15 @@ func main() {
 			if exportDatabaseStatus {
 				models.ExportDatabaseStatus()
 			}
+
+			if exportConfiguration {
+				models.ExportConfiguration()
+			}
 		}
 	}()
 
 	r := prometheus.NewRegistry()
+	r.MustRegister(transactionHistogram)
 	models.Register(r)
 
 	// [...] update metrics within a goroutine
@@ -99,13 +115,17 @@ func main() {
 func retrieveMetrics() (*models.FDBStatus, error) {
 	fmt.Println("refreshing metrics")
 
+	start := time.Now()
 	jsonRaw, err := db.ReadTransact(func(tr fdb.ReadTransaction) (interface{}, error) {
 		return tr.Get(fdb.Key(jsonKey)).Get()
 	})
+	duration := time.Since(start)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot get status")
 	}
+
+	transactionHistogram.Observe(duration.Seconds())
 
 	var status models.FDBStatus
 	err = json.NewDecoder(bytes.NewReader(jsonRaw.([]byte))).Decode(&status)
