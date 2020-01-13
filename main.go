@@ -15,6 +15,7 @@ import (
 	"github.com/PierreZ/fdb-prometheus-exporter/models"
 	"github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/pkg/errors"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -35,7 +36,7 @@ func main() {
 	clusterFile := getEnv("FDB_CLUSTER_FILE", "/var/fdb/data/fdb.cluster")
 
 	if _, exists := os.LookupEnv("FDB_CREATE_CLUSTER_FILE"); exists {
-		execBash()
+		createClusterFile()
 	}
 
 	fmt.Println("opening cluster file at", clusterFile)
@@ -77,8 +78,13 @@ func main() {
 		}
 	}()
 
-	// Expose the registered metrics via HTTP.
-	http.Handle("/metrics", promhttp.Handler())
+	r := prometheus.NewRegistry()
+	models.Register(r)
+
+	// [...] update metrics within a goroutine
+	handler := promhttp.HandlerFor(r, promhttp.HandlerOpts{})
+	http.Handle("/metrics", handler)
+
 	log.Fatal(http.ListenAndServe(listenTo, nil))
 }
 
@@ -110,20 +116,13 @@ func getEnv(key, fallback string) string {
 	return value
 }
 
-func execBash() {
+func createClusterFile() {
 	cmd := exec.Command("/create_cluster_file.bash")
 
-	stderr, err := cmd.StderrPipe()
+	fmt.Printf("Running command 'create_cluster_file' and waiting for it to finish...\n")
+	stdoutStderr, err := cmd.CombinedOutput()
+	fmt.Printf("%s\n", stdoutStderr)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("Running command 'create_cluster_file' and waiting for it to finish...\n")
-	err = cmd.Run()
-	if err != nil {
-		slurp, _ := ioutil.ReadAll(stderr)
-		fmt.Printf("%s\n", slurp)
-		log.Fatalf("cannot run create_cluster_file: %v", err)
-	}
-	fmt.Println("Command finished")
 }

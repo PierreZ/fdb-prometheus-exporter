@@ -1,8 +1,11 @@
 ARG FDB_VERSION=6.2.11
 FROM foundationdb/foundationdb:${FDB_VERSION} as fdb
-FROM golang:1.13.4-stretch
+FROM golang:1.13.6-stretch
 ARG FDB_VERSION
 
+RUN apt update
+# dnsutils is needed to have dig installed to create cluster file
+RUN apt install -y dnsutils 
 
 WORKDIR /tmp
 

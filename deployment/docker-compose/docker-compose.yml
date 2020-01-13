@@ -56,7 +56,7 @@ services:
       args:
         FDB_VERSION: ${FDB_VERSION}
     ports:
-      - 8081:808/tcp
+      - 8081:8080/tcp
     environment:
       FDB_CREATE_CLUSTER_FILE: "true"
       FDB_CLUSTER_FILE: "/etc/foundationdb/fdb.cluster"

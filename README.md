@@ -12,7 +12,7 @@ cd deployment/docker-compose
 docker-compose up --build
 
 # Metrics will be available at
-curl localhost:8081/metrics | grep fdb
+curl localhost:8081/metrics | grep fdb | grep -v "#"
 ```
 
 ### Kubernetes
