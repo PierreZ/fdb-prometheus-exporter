@@ -364,7 +364,10 @@ func (d *DynamicRole) UnmarshalJSON(data []byte) error {
 
 }
 
+// DynamicEmptyStructRole represents usess struct for metrics
 type DynamicEmptyStructRole struct{}
+
+// DynamicStorageRole represents metrics for storage role
 type DynamicStorageRole struct {
 	BytesQueried struct {
 		Counter   float64 `json:"counter"`
