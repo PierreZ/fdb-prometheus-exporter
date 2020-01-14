@@ -170,8 +170,21 @@ func (s FDBStatus) ExportProcesses() {
 			"class_type":   info.ClassType,
 			"info":         "megabits_send_per_second",
 		}).Set(float64(info.Network.MegabitsSent.Hz))
+
+		for _, role := range info.Roles {
+			switch r := role.Value.(type) {
+			case DynamicStorageRole:
+				exposeStorageRoleMetrics(&r)
+			case DynamicLogRole:
+				exposeLogRoleMetrics(&r)
+			default: // nothing to expose
+			}
+		}
 	}
 }
+
+func exposeStorageRoleMetrics(r *DynamicStorageRole) {}
+func exposeLogRoleMetrics(r *DynamicLogRole)         {}
 
 func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(processCPUInfo)

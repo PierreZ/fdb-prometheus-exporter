@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -124,7 +123,7 @@ func retrieveMetrics() (*models.FDBStatus, error) {
 	}
 
 	var status models.FDBStatus
-	err = json.NewDecoder(bytes.NewReader(jsonRaw.([]byte))).Decode(&status)
+	err = json.Unmarshal([]byte(jsonRaw.([]byte)), &status)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot decode json")
 	}

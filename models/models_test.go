@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"strings"
 	"testing"
 )
 
@@ -1219,7 +1218,7 @@ func TestUnmarshal(t *testing.T) {
 }
 	`
 	var status FDBStatus
-	err := json.NewDecoder(strings.NewReader(jsonRaw)).Decode(&status)
+	err := json.Unmarshal([]byte(jsonRaw), &status)
 	if err != nil {
 		t.Error(err)
 	}
