@@ -429,6 +429,7 @@ type DynamicStorageRole struct {
 
 // DynamicLogRole contains details about the Role log
 type DynamicLogRole struct {
+	Role         string  `json:"role"`
 	DataVersion  float64 `json:"data_version"`
 	DurableBytes struct {
 		Counter   float64 `json:"counter"`
