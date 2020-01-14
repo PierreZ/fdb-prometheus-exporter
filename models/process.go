@@ -43,10 +43,25 @@ var (
 		Help: "process disk",
 	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 
-	processMemoryInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Name: "fdb_processes_memory_info",
+	processMemoryInfoAvailableBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_memory_available_bytes",
+		Help: "process memory available_bytes",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processMemoryInfoLimitBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_memory_limit_bytes",
 		Help: "process memory info",
-	}, []string{"process_id", "machine_id", "address", "fault_domain", "class_type", "info"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processMemoryInfoUnusedMemory = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_memory_unused_allocated_memory",
+		Help: "process memory info",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processMemoryInfoUsedBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_memory_used_bytes",
+		Help: "process memory info",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 
 	processNetworkConnectionError = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_errors_per_second",
@@ -134,37 +149,32 @@ func (s FDBStatus) ExportProcesses() {
 			"fault_domain": info.FaultDomain,
 		}).Set(float64(info.Disk.Writes.Hz))
 
-		processMemoryInfo.With(prometheus.Labels{
+		processMemoryInfoAvailableBytes.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "available_bytes",
 		}).Set(float64(info.Memory.AvailableBytes))
-		processMemoryInfo.With(prometheus.Labels{
+
+		processMemoryInfoLimitBytes.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "limit_bytes",
 		}).Set(float64(info.Memory.LimitBytes))
-		processMemoryInfo.With(prometheus.Labels{
+
+		processMemoryInfoUnusedMemory.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "unused_allocated_memory",
 		}).Set(float64(info.Memory.UnusedAllocatedMemory))
-		processMemoryInfo.With(prometheus.Labels{
+
+		processMemoryInfoUsedBytes.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "used_bytes",
 		}).Set(float64(info.Memory.UsedBytes))
 
 		// network
@@ -234,7 +244,10 @@ func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(processDiskInfoTotalBytes)
 	r.MustRegister(processDiskInfoWriteHZ)
 	r.MustRegister(processDiskInfoWritesTotal)
-	r.MustRegister(processMemoryInfo)
+	r.MustRegister(processMemoryInfoAvailableBytes)
+	r.MustRegister(processMemoryInfoLimitBytes)
+	r.MustRegister(processMemoryInfoUsedBytes)
+	r.MustRegister(processMemoryInfoUnusedMemory)
 	r.MustRegister(processNetworkConnectionError)
 	r.MustRegister(processNetworkConnectionsClosed)
 	r.MustRegister(processNetworkConnectionsEstablished)
