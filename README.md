@@ -52,3 +52,10 @@ kubectl port-forward fdb-prometheus-exporter 8080:8080
 # To destroy it
 kubectl delete -f ./deployment/kubernetes/fdb-metrics-pod.yaml
 ```
+
+You can also find a `Batch` job for [go-ycsb](https://github.com/pingcap/go-ycsb/) to spawn some workloads.
+
+```bash
+# spawn ycsbn workload a to f as a K8S Batch
+kubectl apply -f ./deployment/kubernetes/go-ycsb-batch.yaml
+```
