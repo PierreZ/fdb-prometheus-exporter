@@ -8,10 +8,40 @@ var (
 		Help: "process cpu",
 	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 
-	processDiskInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Name: "fdb_processes_disk_info",
+	processDiskInfoBusy = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_busy",
+		Help: "process disk busy",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoFreeBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_free_bytes",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain", "class_type", "info"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoReadHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_reads_per_second",
+		Help: "process disk",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoReadTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_reads_total",
+		Help: "process disk",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoTotalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_total_bytes",
+		Help: "process disk",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoWriteHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_writes_per_second",
+		Help: "process disk",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processDiskInfoWritesTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_writes_total",
+		Help: "process disk",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 
 	processMemoryInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_info",
@@ -60,53 +90,48 @@ func (s FDBStatus) ExportProcesses() {
 			"class_type":   info.ClassType,
 		}).Set(float64(info.CPU.UsageCores))
 
-		processDiskInfo.With(prometheus.Labels{
+		processDiskInfoBusy.With(prometheus.Labels{
 			"machine_id":   info.Locality.Machineid,
 			"process_id":   process,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "busy",
 		}).Set(float64(info.Disk.Busy))
-		processDiskInfo.With(prometheus.Labels{
+
+		processDiskInfoFreeBytes.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "free_bytes",
 		}).Set(float64(info.Disk.FreeBytes))
-		processDiskInfo.With(prometheus.Labels{
+
+		processDiskInfoReadHZ.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "reads_total",
-		}).Set(float64(info.Disk.Reads.Counter))
-		processDiskInfo.With(prometheus.Labels{
+		}).Set(float64(info.Disk.Reads.Hz))
+
+		processDiskInfoReadTotal.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
 			"class_type":   info.ClassType,
 			"info":         "reads_per_second",
-		}).Set(float64(info.Disk.Reads.Hz))
-		processDiskInfo.With(prometheus.Labels{
+		}).Set(float64(info.Disk.Reads.Counter))
+
+		processDiskInfoWritesTotal.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "writes_total",
 		}).Set(float64(info.Disk.Writes.Counter))
-		processDiskInfo.With(prometheus.Labels{
+
+		processDiskInfoWriteHZ.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "writes_per_second",
 		}).Set(float64(info.Disk.Writes.Hz))
 
 		processMemoryInfo.With(prometheus.Labels{
@@ -202,7 +227,13 @@ func exposeLogRoleMetrics(r *DynamicLogRole)         {}
 
 func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(processCPUInfo)
-	r.MustRegister(processDiskInfo)
+	r.MustRegister(processDiskInfoBusy)
+	r.MustRegister(processDiskInfoFreeBytes)
+	r.MustRegister(processDiskInfoReadHZ)
+	r.MustRegister(processDiskInfoReadTotal)
+	r.MustRegister(processDiskInfoTotalBytes)
+	r.MustRegister(processDiskInfoWriteHZ)
+	r.MustRegister(processDiskInfoWritesTotal)
 	r.MustRegister(processMemoryInfo)
 	r.MustRegister(processNetworkConnectionError)
 	r.MustRegister(processNetworkConnectionsClosed)
