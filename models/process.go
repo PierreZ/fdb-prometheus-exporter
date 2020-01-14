@@ -6,7 +6,7 @@ var (
 	processCPUInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_cpu_usage_cores",
 		Help: "process cpu",
-	}, []string{"process_id", "machine_id", "address", "fault_domain", "class_type"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 
 	processDiskInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_info",
@@ -18,10 +18,35 @@ var (
 		Help: "process memory info",
 	}, []string{"process_id", "machine_id", "address", "fault_domain", "class_type", "info"})
 
-	processNetworkInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Name: "fdb_processes_network_info",
-		Help: "process network info",
-	}, []string{"process_id", "machine_id", "address", "fault_domain", "class_type", "info"})
+	processNetworkConnectionError = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_connection_errors_per_second",
+		Help: "process network errors",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processNetworkConnectionsClosed = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_connection_closed_per_second",
+		Help: "process network closed",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processNetworkConnectionsEstablished = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_connection_established_per_second",
+		Help: "process network established",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processNetworkCurrentConnection = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_current_connections_per_second",
+		Help: "process netcowrk current connections",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processNetworkReceived = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_megabits_received_per_second",
+		Help: "process netcowrk mega bit",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+
+	processNetworkSent = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_megabits_sent_per_second",
+		Help: "process netcowrk current connections",
+	}, []string{"process_id", "machine_id", "address", "fault_domain"})
 )
 
 // ExportProcesses is exporting the configuration
@@ -117,58 +142,47 @@ func (s FDBStatus) ExportProcesses() {
 			"info":         "used_bytes",
 		}).Set(float64(info.Memory.UsedBytes))
 
-		processNetworkInfo.With(prometheus.Labels{
+		// network
+		processNetworkConnectionError.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "connection_errors_per_second",
 		}).Set(float64(info.Network.ConnectionErrors.Hz))
 
-		processNetworkInfo.With(prometheus.Labels{
+		processNetworkConnectionsClosed.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "connections_closed",
 		}).Set(float64(info.Network.ConnectionsClosed.Hz))
 
-		processNetworkInfo.With(prometheus.Labels{
+		processNetworkConnectionsEstablished.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "connections_established",
 		}).Set(float64(info.Network.ConnectionsEstablished.Hz))
 
-		processNetworkInfo.With(prometheus.Labels{
+		processNetworkCurrentConnection.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "current_connections",
 		}).Set(float64(info.Network.CurrentConnections))
 
-		processNetworkInfo.With(prometheus.Labels{
+		processNetworkReceived.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "megabits_received_per_second",
 		}).Set(float64(info.Network.MegabitsReceived.Hz))
 
-		processNetworkInfo.With(prometheus.Labels{
+		processNetworkSent.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "megabits_send_per_second",
 		}).Set(float64(info.Network.MegabitsSent.Hz))
 
 		for _, role := range info.Roles {
@@ -190,5 +204,10 @@ func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(processCPUInfo)
 	r.MustRegister(processDiskInfo)
 	r.MustRegister(processMemoryInfo)
-	r.MustRegister(processNetworkInfo)
+	r.MustRegister(processNetworkConnectionError)
+	r.MustRegister(processNetworkConnectionsClosed)
+	r.MustRegister(processNetworkConnectionsEstablished)
+	r.MustRegister(processNetworkCurrentConnection)
+	r.MustRegister(processNetworkReceived)
+	r.MustRegister(processNetworkSent)
 }
