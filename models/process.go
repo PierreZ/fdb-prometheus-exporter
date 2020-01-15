@@ -262,7 +262,6 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
 		}).Set(float64(info.CPU.UsageCores))
 
 		processDiskInfoBusy.With(prometheus.Labels{
@@ -291,8 +290,6 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"class_type":   info.ClassType,
-			"info":         "reads_per_second",
 		}).Set(float64(info.Disk.Reads.Counter))
 
 		processDiskInfoWritesTotal.With(prometheus.Labels{
