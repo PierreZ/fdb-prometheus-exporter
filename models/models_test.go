@@ -1223,5 +1223,8 @@ func TestUnmarshal(t *testing.T) {
 		t.Error(err)
 	}
 
-	t.Logf("%+v\n", status)
+	//t.Logf("%+v\n", status)
+	for _, role := range status.Cluster.Processes["20de3b05fb1792d316e8e31bb90c705e"].Roles {
+		t.Logf("%+v", role.Value)
+	}
 }

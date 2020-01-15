@@ -365,7 +365,9 @@ func (d *DynamicRole) UnmarshalJSON(data []byte) error {
 }
 
 // DynamicEmptyStructRole represents usess struct for metrics
-type DynamicEmptyStructRole struct{}
+type DynamicEmptyStructRole struct {
+	Role string `json:"role"`
+}
 
 // DynamicStorageRole represents metrics for storage role
 type DynamicStorageRole struct {

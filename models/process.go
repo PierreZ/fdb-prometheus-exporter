@@ -1,6 +1,8 @@
 package models
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 var (
 	processCPUInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
@@ -379,7 +381,7 @@ func (s FDBStatus) ExportProcesses() {
 
 		for _, role := range info.Roles {
 			switch r := role.Value.(type) {
-			case DynamicLogRole:
+			case *DynamicLogRole:
 				logRoleDataVersion.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
@@ -477,7 +479,7 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.QueueDiskUsedBytes))
 
-			case DynamicStorageRole:
+			case *DynamicStorageRole:
 				storageRoleBytesQueriedCounter.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
