@@ -147,6 +147,111 @@ var (
 		Name: "fdb_processes_queue_disk_used_bytes",
 		Help: "process log data version",
 	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleBytesQueriedHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_bytes_queried_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleBytesQueriedCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_bytes_queried_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleDataLagSeconds = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_data_lag_seconds",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleDataLagVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_data_lag_versions",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleDurabilityLagSeconds = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_durability_lag_seconds",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleDurabilityLagVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_durability_lag_versions",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleDurableVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_durable_version",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleFinishedQueriesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_finished_queries_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleFinishedQueriesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_finished_queries_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleInputBytesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_input_bytes_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleInputBytesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_input_bytes_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleKeysQueriedCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_keys_queried_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleKeysQueriedHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_keys_queried_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleMutationsCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_mutations_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleMutationHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_mutations_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleMutationsBytesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_mutations_bytes_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleMutationBytesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_mutations_bytes_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleTotalQueriesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_queries_total",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleTotalQueriesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_queries_per_second",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleQueryMaxQueue = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_query_queue_max",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleStoredBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_stored_bytes",
+		Help: "process storage bytes_queried",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
 )
 
 // ExportProcesses is exporting the configuration
@@ -339,7 +444,6 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.KvstoreUsedBytes))
 
-				// TODO
 				logRoleQueueAvailableBytes.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
@@ -377,6 +481,238 @@ func (s FDBStatus) ExportProcesses() {
 				}).Set(float64(r.QueueDiskUsedBytes))
 
 			case DynamicStorageRole:
+				storageRoleBytesQueriedCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.BytesQueried.Counter))
+				storageRoleBytesQueriedHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.BytesQueried.Hz))
+
+				storageRoleDataLagSeconds.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DataLag.Seconds))
+
+				storageRoleDataLagVersions.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DataLag.Versions))
+
+				logRoleDataVersion.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DataVersion))
+
+				logRoleDurableBytesHZ.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DurableBytes.Hz))
+
+				logRoleDurableBytesCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DurableBytes.Counter))
+
+				storageRoleDurableVersions.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.DurableVersion))
+
+				storageRoleFinishedQueriesCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.FinishedQueries.Counter))
+
+				storageRoleFinishedQueriesHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.FinishedQueries.Hz))
+
+				storageRoleInputBytesCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.InputBytes.Counter))
+
+				storageRoleInputBytesHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.InputBytes.Hz))
+
+				storageRoleKeysQueriedCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KeysQueried.Counter))
+
+				storageRoleKeysQueriedHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KeysQueried.Hz))
+
+				logRoleQueueAvailableBytes.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KvstoreAvailableBytes))
+
+				logRoleQueueFreeBytes.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KvstoreFreeBytes))
+
+				logRoleQueueTotalBytes.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KvstoreTotalBytes))
+
+				logRoleQueueUsedbytes.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.KvstoreUsedBytes))
+
+				storageRoleMutationBytesHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.MutationBytes.Hz))
+
+				storageRoleMutationsBytesCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.MutationBytes.Counter))
+
+				storageRoleMutationHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.Mutations.Hz))
+
+				storageRoleMutationsCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.Mutations.Counter))
+
+				storageRoleQueryMaxQueue.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.QueryQueueMax))
+
+				storageRoleStoredBytes.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.StoredBytes))
+
+				storageRoleTotalQueriesCounter.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.TotalQueries.Counter))
+
+				storageRoleTotalQueriesHz.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"role":         r.Role,
+				}).Set(float64(r.TotalQueries.Hz))
 			default: // nothing to expose
 			}
 		}
@@ -413,4 +749,26 @@ func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(logRoleQueueUsedbytes)
 	r.MustRegister(logRoleTotalBytes)
 	r.MustRegister(logRoleUsedBytes)
+
+	r.MustRegister(storageRoleBytesQueriedCounter)
+	r.MustRegister(storageRoleBytesQueriedHz)
+	r.MustRegister(storageRoleDataLagSeconds)
+	r.MustRegister(storageRoleDataLagVersions)
+	r.MustRegister(storageRoleDurabilityLagSeconds)
+	r.MustRegister(storageRoleDurabilityLagVersions)
+	r.MustRegister(storageRoleDurableVersions)
+	r.MustRegister(storageRoleFinishedQueriesCounter)
+	r.MustRegister(storageRoleFinishedQueriesHz)
+	r.MustRegister(storageRoleInputBytesCounter)
+	r.MustRegister(storageRoleInputBytesHz)
+	r.MustRegister(storageRoleKeysQueriedCounter)
+	r.MustRegister(storageRoleKeysQueriedHz)
+	r.MustRegister(storageRoleMutationBytesHz)
+	r.MustRegister(storageRoleMutationHz)
+	r.MustRegister(storageRoleMutationsBytesCounter)
+	r.MustRegister(storageRoleMutationsCounter)
+	r.MustRegister(storageRoleQueryMaxQueue)
+	r.MustRegister(storageRoleStoredBytes)
+	r.MustRegister(storageRoleTotalQueriesCounter)
+	r.MustRegister(storageRoleTotalQueriesHz)
 }
