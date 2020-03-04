@@ -259,459 +259,120 @@ var (
 // ExportProcesses is exporting the configuration
 func (s FDBStatus) ExportProcesses() {
 	for process, info := range s.Cluster.Processes {
-		processCPUInfo.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.CPU.UsageCores))
 
-		processDiskInfoBusy.With(prometheus.Labels{
-			"machine_id":   info.Locality.Machineid,
-			"process_id":   process,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.Busy))
-
-		processDiskInfoFreeBytes.With(prometheus.Labels{
+		labels := prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.FreeBytes))
-
-		processDiskInfoReadHZ.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.Reads.Hz))
-
-		processDiskInfoReadTotal.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.Reads.Counter))
-
-		processDiskInfoWritesTotal.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.Writes.Counter))
-
-		processDiskInfoWriteHZ.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Disk.Writes.Hz))
-
-		processMemoryInfoAvailableBytes.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Memory.AvailableBytes))
-
-		processMemoryInfoLimitBytes.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Memory.LimitBytes))
-
-		processMemoryInfoUnusedMemory.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Memory.UnusedAllocatedMemory))
-
-		processMemoryInfoUsedBytes.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Memory.UsedBytes))
-
-		// network
-		processNetworkConnectionError.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.ConnectionErrors.Hz))
-
-		processNetworkConnectionsClosed.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.ConnectionsClosed.Hz))
-
-		processNetworkConnectionsEstablished.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.ConnectionsEstablished.Hz))
-
-		processNetworkCurrentConnection.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.CurrentConnections))
-
-		processNetworkReceived.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.MegabitsReceived.Hz))
-
-		processNetworkSent.With(prometheus.Labels{
-			"process_id":   process,
-			"machine_id":   info.Locality.Machineid,
-			"address":      info.Address,
-			"fault_domain": info.FaultDomain,
-		}).Set(float64(info.Network.MegabitsSent.Hz))
+		}
 
 		for _, role := range info.Roles {
 			switch r := role.Value.(type) {
 			case *DynamicLogRole:
-				logRoleDataVersion.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DataVersion))
-				logRoleDurableBytesHZ.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DurableBytes.Hz))
-				logRoleDurableBytesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DurableBytes.Counter))
+				labels["role_"+r.Role] = "1"
+			case *DynamicStorageRole:
+				labels["role_"+r.Role] = "1"
+			case *DynamicEmptyStructRole:
+				labels["role_"+r.Role] = "1"
+			default: // nothing to expose
+			}
+		}
 
-				logRoleAvailableBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreAvailableBytes))
+		processCPUInfo.With(labels).Set(float64(info.CPU.UsageCores))
 
-				logRoleFreeBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreFreeBytes))
+		processDiskInfoBusy.With(labels).Set(float64(info.Disk.Busy))
 
-				logRoleTotalBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreTotalBytes))
+		processDiskInfoFreeBytes.With(labels).Set(float64(info.Disk.FreeBytes))
 
-				logRoleUsedBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreUsedBytes))
+		processDiskInfoReadHZ.With(labels).Set(float64(info.Disk.Reads.Hz))
 
-				logRoleQueueAvailableBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.QueueDiskAvailableBytes))
+		processDiskInfoReadTotal.With(labels).Set(float64(info.Disk.Reads.Counter))
 
-				logRoleQueueFreeBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.QueueDiskFreeBytes))
+		processDiskInfoWritesTotal.With(labels).Set(float64(info.Disk.Writes.Counter))
 
-				logRoleQueueTotalBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.QueueDiskTotalBytes))
+		processDiskInfoWriteHZ.With(labels).Set(float64(info.Disk.Writes.Hz))
 
-				logRoleQueueUsedbytes.With(prometheus.Labels{
+		processMemoryInfoAvailableBytes.With(labels).Set(float64(info.Memory.AvailableBytes))
+
+		processMemoryInfoLimitBytes.With(labels).Set(float64(info.Memory.LimitBytes))
+
+		processMemoryInfoUnusedMemory.With(labels).Set(float64(info.Memory.UnusedAllocatedMemory))
+
+		processMemoryInfoUsedBytes.With(labels).Set(float64(info.Memory.UsedBytes))
+
+		// network
+		processNetworkConnectionError.With(labels).Set(float64(info.Network.ConnectionErrors.Hz))
+
+		processNetworkConnectionsClosed.With(labels).Set(float64(info.Network.ConnectionsClosed.Hz))
+
+		processNetworkConnectionsEstablished.With(labels).Set(float64(info.Network.ConnectionsEstablished.Hz))
+
+		processNetworkCurrentConnection.With(labels).Set(float64(info.Network.CurrentConnections))
+
+		processNetworkReceived.With(labels).Set(float64(info.Network.MegabitsReceived.Hz))
+
+		processNetworkSent.With(labels).Set(float64(info.Network.MegabitsSent.Hz))
+
+		for _, role := range info.Roles {
+			switch r := role.Value.(type) {
+			case *DynamicLogRole:
+				labels := prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
 					"fault_domain": info.FaultDomain,
 					"id":           r.ID,
 					"role":         r.Role,
-				}).Set(float64(r.QueueDiskUsedBytes))
+				}
+				logRoleDataVersion.With(labels).Set(float64(r.DataVersion))
+				logRoleDurableBytesHZ.With(labels).Set(float64(r.DurableBytes.Hz))
+				logRoleDurableBytesCounter.With(labels).Set(float64(r.DurableBytes.Counter))
+				logRoleAvailableBytes.With(labels).Set(float64(r.KvstoreAvailableBytes))
+				logRoleFreeBytes.With(labels).Set(float64(r.KvstoreFreeBytes))
+				logRoleTotalBytes.With(labels).Set(float64(r.KvstoreTotalBytes))
+				logRoleUsedBytes.With(labels).Set(float64(r.KvstoreUsedBytes))
+				logRoleQueueAvailableBytes.With(labels).Set(float64(r.QueueDiskAvailableBytes))
+				logRoleQueueFreeBytes.With(labels).Set(float64(r.QueueDiskFreeBytes))
+				logRoleQueueTotalBytes.With(labels).Set(float64(r.QueueDiskTotalBytes))
+				logRoleQueueUsedbytes.With(labels).Set(float64(r.QueueDiskUsedBytes))
 
 			case *DynamicStorageRole:
-				storageRoleBytesQueriedCounter.With(prometheus.Labels{
+				labels := prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
 					"fault_domain": info.FaultDomain,
 					"id":           r.ID,
 					"role":         r.Role,
-				}).Set(float64(r.BytesQueried.Counter))
-				storageRoleBytesQueriedHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.BytesQueried.Hz))
+				}
 
-				storageRoleDataLagSeconds.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DataLag.Seconds))
-
-				storageRoleDataLagVersions.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DataLag.Versions))
-
-				logRoleDataVersion.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DataVersion))
-
-				logRoleDurableBytesHZ.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DurableBytes.Hz))
-
-				logRoleDurableBytesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DurableBytes.Counter))
-
-				storageRoleDurableVersions.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.DurableVersion))
-
-				storageRoleFinishedQueriesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.FinishedQueries.Counter))
-
-				storageRoleFinishedQueriesHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.FinishedQueries.Hz))
-
-				storageRoleInputBytesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.InputBytes.Counter))
-
-				storageRoleInputBytesHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.InputBytes.Hz))
-
-				storageRoleKeysQueriedCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KeysQueried.Counter))
-
-				storageRoleKeysQueriedHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KeysQueried.Hz))
-
-				logRoleQueueAvailableBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreAvailableBytes))
-
-				logRoleQueueFreeBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreFreeBytes))
-
-				logRoleQueueTotalBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreTotalBytes))
-
-				logRoleQueueUsedbytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.KvstoreUsedBytes))
-
-				storageRoleMutationBytesHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.MutationBytes.Hz))
-
-				storageRoleMutationsBytesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.MutationBytes.Counter))
-
-				storageRoleMutationHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.Mutations.Hz))
-
-				storageRoleMutationsCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.Mutations.Counter))
-
-				storageRoleQueryMaxQueue.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.QueryQueueMax))
-
-				storageRoleStoredBytes.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.StoredBytes))
-
-				storageRoleTotalQueriesCounter.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.TotalQueries.Counter))
-
-				storageRoleTotalQueriesHz.With(prometheus.Labels{
-					"process_id":   process,
-					"machine_id":   info.Locality.Machineid,
-					"address":      info.Address,
-					"fault_domain": info.FaultDomain,
-					"id":           r.ID,
-					"role":         r.Role,
-				}).Set(float64(r.TotalQueries.Hz))
+				storageRoleBytesQueriedCounter.With(labels).Set(float64(r.BytesQueried.Counter))
+				storageRoleBytesQueriedHz.With(labels).Set(float64(r.BytesQueried.Hz))
+				storageRoleDataLagSeconds.With(labels).Set(float64(r.DataLag.Seconds))
+				storageRoleDataLagVersions.With(labels).Set(float64(r.DataLag.Versions))
+				logRoleDataVersion.With(labels).Set(float64(r.DataVersion))
+				logRoleDurableBytesHZ.With(labels).Set(float64(r.DurableBytes.Hz))
+				logRoleDurableBytesCounter.With(labels).Set(float64(r.DurableBytes.Counter))
+				storageRoleDurableVersions.With(labels).Set(float64(r.DurableVersion))
+				storageRoleFinishedQueriesCounter.With(labels).Set(float64(r.FinishedQueries.Counter))
+				storageRoleFinishedQueriesHz.With(labels).Set(float64(r.FinishedQueries.Hz))
+				storageRoleInputBytesCounter.With(labels).Set(float64(r.InputBytes.Counter))
+				storageRoleInputBytesHz.With(labels).Set(float64(r.InputBytes.Hz))
+				storageRoleKeysQueriedCounter.With(labels).Set(float64(r.KeysQueried.Counter))
+				storageRoleKeysQueriedHz.With(labels).Set(float64(r.KeysQueried.Hz))
+				logRoleQueueAvailableBytes.With(labels).Set(float64(r.KvstoreAvailableBytes))
+				logRoleQueueFreeBytes.With(labels).Set(float64(r.KvstoreFreeBytes))
+				logRoleQueueTotalBytes.With(labels).Set(float64(r.KvstoreTotalBytes))
+				logRoleQueueUsedbytes.With(labels).Set(float64(r.KvstoreUsedBytes))
+				storageRoleMutationBytesHz.With(labels).Set(float64(r.MutationBytes.Hz))
+				storageRoleMutationsBytesCounter.With(labels).Set(float64(r.MutationBytes.Counter))
+				storageRoleMutationHz.With(labels).Set(float64(r.Mutations.Hz))
+				storageRoleMutationsCounter.With(labels).Set(float64(r.Mutations.Counter))
+				storageRoleQueryMaxQueue.With(labels).Set(float64(r.QueryQueueMax))
+				storageRoleStoredBytes.With(labels).Set(float64(r.StoredBytes))
+				storageRoleTotalQueriesCounter.With(labels).Set(float64(r.TotalQueries.Counter))
+				storageRoleTotalQueriesHz.With(labels).Set(float64(r.TotalQueries.Hz))
 			default: // nothing to expose
 			}
 		}
