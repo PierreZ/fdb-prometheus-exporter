@@ -114,7 +114,8 @@ func main() {
 
 func retrieveMetrics() (*models.FDBStatus, error) {
 
-	jsonRaw, err := db.ReadTransact(func(tr fdb.ReadTransaction) (interface{}, error) {
+	jsonRaw, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {
+		_ = tr.Options().SetPrioritySystemImmediate()
 		return tr.Get(fdb.Key(jsonKey)).Get()
 	})
 
