@@ -34,8 +34,8 @@ var (
 	})
 
 	clusterMovingDataInQueueBytes = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "fdb_cluster_moving_data_in_flight_bytes",
-		Help: "Cluster moving data in flight bytes",
+		Name: "fdb_cluster_moving_data_in_queue_bytes",
+		Help: "Cluster moving data in queue bytes",
 	})
 
 	clusterMovingDataInFlightBytes = prometheus.NewGauge(prometheus.GaugeOpts{
