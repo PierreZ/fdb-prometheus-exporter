@@ -7,261 +7,287 @@ import (
 
 var processLabels = []string{"process_id", "machine_id", "address", "fault_domain", "role"}
 var roleLabels = []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"}
+var allProcessMetrics []*prometheus.GaugeVec
+var allRoleMetrics []*prometheus.GaugeVec
+
+func ClearAll() {
+	for _, metric := range allProcessMetrics {
+		metric.DeleteLabelValues(processLabels...)
+	}
+
+	for _, metric := range allRoleMetrics {
+		metric.DeleteLabelValues(roleLabels...)
+	}
+}
+
+func NewProcessGaugeVec(opts prometheus.GaugeOpts) *prometheus.GaugeVec {
+	vec := prometheus.NewGaugeVec(opts, processLabels)
+	allProcessMetrics = append(allProcessMetrics, vec)
+	return vec
+}
+
+func NewRoleGaugeVec(opts prometheus.GaugeOpts) *prometheus.GaugeVec {
+	vec := prometheus.NewGaugeVec(opts, roleLabels)
+	allRoleMetrics = append(allRoleMetrics, vec)
+	return vec
+}
 
 var (
-	processCPUInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processCPUInfo = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_cpu_usage_cores",
 		Help: "process cpu",
-	}, processLabels)
+	})
 
-	processDiskInfoBusy = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoBusy = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_busy",
 		Help: "process disk busy",
-	}, processLabels)
+	})
 
-	processDiskInfoFreeBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoFreeBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_free_bytes",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processDiskInfoReadHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoReadHZ = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_reads_per_second",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processDiskInfoReadTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoReadTotal = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_reads_total",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processDiskInfoTotalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoTotalBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_total_bytes",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processDiskInfoWriteHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoWriteHZ = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_writes_per_second",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processDiskInfoWritesTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processDiskInfoWritesTotal = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_writes_total",
 		Help: "process disk",
-	}, processLabels)
+	})
 
-	processMemoryInfoAvailableBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processMemoryInfoAvailableBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_available_bytes",
 		Help: "process memory available_bytes",
-	}, processLabels)
+	})
 
-	processMemoryInfoLimitBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processMemoryInfoLimitBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_limit_bytes",
 		Help: "process memory info",
-	}, processLabels)
+	})
 
-	processMemoryInfoUnusedMemory = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processMemoryInfoUnusedMemory = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_unused_allocated_memory",
 		Help: "process memory info",
-	}, processLabels)
+	})
 
-	processMemoryInfoUsedBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processMemoryInfoUsedBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_used_bytes",
 		Help: "process memory info",
-	}, processLabels)
+	})
 
-	processNetworkConnectionError = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkConnectionError = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_errors_per_second",
 		Help: "process network errors",
-	}, processLabels)
+	})
 
-	processNetworkConnectionsClosed = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkConnectionsClosed = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_closed_per_second",
 		Help: "process network closed",
-	}, processLabels)
+	})
 
-	processNetworkConnectionsEstablished = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkConnectionsEstablished = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_established_per_second",
 		Help: "process network established",
-	}, processLabels)
+	})
 
-	processNetworkCurrentConnections = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkCurrentConnections = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_current_connections",
 		Help: "process network current connections",
-	}, processLabels)
+	})
 
-	processNetworkReceived = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkReceived = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_megabits_received_per_second",
 		Help: "process network mega bit",
-	}, processLabels)
+	})
 
-	processNetworkSent = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	processNetworkSent = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_megabits_sent_per_second",
 		Help: "process network current connections",
-	}, processLabels)
+	})
 
-	logRoleDataVersion = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleDataVersion = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_data_version",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleDurableBytesHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleDurableBytesHZ = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_durable_bytes_per_second",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleDurableBytesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleDurableBytesCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_durable_bytes_total",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleAvailableBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleAvailableBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_kvstore_available_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleFreeBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleFreeBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_kvstore_free_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleTotalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleTotalBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_kvstore_total_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleUsedBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleUsedBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_kvstore_used_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleQueueAvailableBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleQueueAvailableBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_queue_disk_available_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleQueueFreeBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleQueueFreeBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_queue_disk_free_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleQueueTotalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleQueueTotalBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_queue_disk_total_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	logRoleQueueUsedbytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	logRoleQueueUsedbytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_queue_disk_used_bytes",
 		Help: "process log data version",
-	}, roleLabels)
+	})
 
-	storageRoleBytesQueriedHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleBytesQueriedHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_bytes_queried_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleBytesQueriedCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleBytesQueriedCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_bytes_queried_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleDataLagSeconds = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleDataLagSeconds = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_data_lag_seconds",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleDataLagVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleDataLagVersions = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_data_lag_versions",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleDurabilityLagSeconds = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleDurabilityLagSeconds = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_durability_lag_seconds",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleDurabilityLagVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleDurabilityLagVersions = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_durability_lag_versions",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleDurableVersions = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleDurableVersions = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_durable_version",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleFinishedQueriesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleFinishedQueriesCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_finished_queries_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleFinishedQueriesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleFinishedQueriesHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_finished_queries_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleInputBytesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleInputBytesCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_input_bytes_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleInputBytesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleInputBytesHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_input_bytes_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleKeysQueriedCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleKeysQueriedCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_keys_queried_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleKeysQueriedHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleKeysQueriedHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_keys_queried_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleMutationsCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleMutationsCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_mutations_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleMutationHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleMutationHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_mutations_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleMutationsBytesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleMutationsBytesCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_mutations_bytes_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleMutationBytesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleMutationBytesHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_mutations_bytes_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleTotalQueriesCounter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleTotalQueriesCounter = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_queries_total",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleTotalQueriesHz = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleTotalQueriesHz = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_queries_per_second",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleQueryMaxQueue = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleQueryMaxQueue = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_query_queue_max",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 
-	storageRoleStoredBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	storageRoleStoredBytes = NewRoleGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_storage_stored_bytes",
 		Help: "process storage bytes_queried",
-	}, roleLabels)
+	})
 )
 
 // ExportProcesses is exporting the configuration
 func (s FDBStatus) ExportProcesses() {
+	ClearAll()
+
 	for process, info := range s.Cluster.Processes {
 
 		var roleNames []string
@@ -390,55 +416,11 @@ func (s FDBStatus) ExportProcesses() {
 }
 
 func registerProcesses(r *prometheus.Registry) {
-	r.MustRegister(processCPUInfo)
-	r.MustRegister(processDiskInfoBusy)
-	r.MustRegister(processDiskInfoFreeBytes)
-	r.MustRegister(processDiskInfoReadHZ)
-	r.MustRegister(processDiskInfoReadTotal)
-	r.MustRegister(processDiskInfoTotalBytes)
-	r.MustRegister(processDiskInfoWriteHZ)
-	r.MustRegister(processDiskInfoWritesTotal)
-	r.MustRegister(processMemoryInfoAvailableBytes)
-	r.MustRegister(processMemoryInfoLimitBytes)
-	r.MustRegister(processMemoryInfoUsedBytes)
-	r.MustRegister(processMemoryInfoUnusedMemory)
-	r.MustRegister(processNetworkConnectionError)
-	r.MustRegister(processNetworkConnectionsClosed)
-	r.MustRegister(processNetworkConnectionsEstablished)
-	r.MustRegister(processNetworkCurrentConnections)
-	r.MustRegister(processNetworkReceived)
-	r.MustRegister(processNetworkSent)
-	r.MustRegister(logRoleAvailableBytes)
-	r.MustRegister(logRoleDataVersion)
-	r.MustRegister(logRoleDurableBytesCounter)
-	r.MustRegister(logRoleDurableBytesHZ)
-	r.MustRegister(logRoleFreeBytes)
-	r.MustRegister(logRoleQueueAvailableBytes)
-	r.MustRegister(logRoleQueueFreeBytes)
-	r.MustRegister(logRoleQueueTotalBytes)
-	r.MustRegister(logRoleQueueUsedbytes)
-	r.MustRegister(logRoleTotalBytes)
-	r.MustRegister(logRoleUsedBytes)
+	for _, metric := range allProcessMetrics {
+		r.MustRegister(metric)
+	}
 
-	r.MustRegister(storageRoleBytesQueriedCounter)
-	r.MustRegister(storageRoleBytesQueriedHz)
-	r.MustRegister(storageRoleDataLagSeconds)
-	r.MustRegister(storageRoleDataLagVersions)
-	r.MustRegister(storageRoleDurabilityLagSeconds)
-	r.MustRegister(storageRoleDurabilityLagVersions)
-	r.MustRegister(storageRoleDurableVersions)
-	r.MustRegister(storageRoleFinishedQueriesCounter)
-	r.MustRegister(storageRoleFinishedQueriesHz)
-	r.MustRegister(storageRoleInputBytesCounter)
-	r.MustRegister(storageRoleInputBytesHz)
-	r.MustRegister(storageRoleKeysQueriedCounter)
-	r.MustRegister(storageRoleKeysQueriedHz)
-	r.MustRegister(storageRoleMutationBytesHz)
-	r.MustRegister(storageRoleMutationHz)
-	r.MustRegister(storageRoleMutationsBytesCounter)
-	r.MustRegister(storageRoleMutationsCounter)
-	r.MustRegister(storageRoleQueryMaxQueue)
-	r.MustRegister(storageRoleStoredBytes)
-	r.MustRegister(storageRoleTotalQueriesCounter)
-	r.MustRegister(storageRoleTotalQueriesHz)
+	for _, metric := range allRoleMetrics {
+		r.MustRegister(metric)
+	}
 }
