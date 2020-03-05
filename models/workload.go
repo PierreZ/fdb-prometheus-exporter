@@ -143,75 +143,75 @@ func (s FDBStatus) ExportWorkload() {
 	}).Set(s.Cluster.Workload.Operations.Writes.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "committed",
+		"transaction": "committed",
 	}).Set(s.Cluster.Workload.Transactions.Committed.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "committed",
+		"transaction": "committed",
 	}).Set(s.Cluster.Workload.Transactions.Committed.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "committed",
+		"transaction": "committed",
 	}).Set(s.Cluster.Workload.Transactions.Committed.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "conflicted",
+		"transaction": "conflicted",
 	}).Set(s.Cluster.Workload.Transactions.Conflicted.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "conflicted",
+		"transaction": "conflicted",
 	}).Set(s.Cluster.Workload.Transactions.Conflicted.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "conflicted",
+		"transaction": "conflicted",
 	}).Set(s.Cluster.Workload.Transactions.Conflicted.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "started",
+		"transaction": "started",
 	}).Set(s.Cluster.Workload.Transactions.Started.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "started",
+		"transaction": "started",
 	}).Set(s.Cluster.Workload.Transactions.Started.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "started",
+		"transaction": "started",
 	}).Set(s.Cluster.Workload.Transactions.Started.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "started_batch_priority",
+		"transaction": "started_batch_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedBatchPriority.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "started_batch_priority",
+		"transaction": "started_batch_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedBatchPriority.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "started_batch_priority",
+		"transaction": "started_batch_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedBatchPriority.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "started_default_priority",
+		"transaction": "started_default_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedDefaultPriority.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "started_default_priority",
+		"transaction": "started_default_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedDefaultPriority.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "started_default_priority",
+		"transaction": "started_default_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedDefaultPriority.Roughness)
 
 	workloadTransactionsHZ.With(prometheus.Labels{
-		"operation": "started_immediate_priority",
+		"transaction": "started_immediate_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedImmediatePriority.Hz)
 
 	workloadTransactionsCounter.With(prometheus.Labels{
-		"operation": "started_immediate_priority",
+		"transaction": "started_immediate_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedImmediatePriority.Counter)
 
 	workloadTransactionsRoughness.With(prometheus.Labels{
-		"operation": "started_immediate_priority",
+		"transaction": "started_immediate_priority",
 	}).Set(s.Cluster.Workload.Transactions.StartedImmediatePriority.Roughness)
 }
 
