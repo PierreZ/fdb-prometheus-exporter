@@ -286,40 +286,40 @@ func (s FDBStatus) ExportProcesses() {
 			"role":         "," + strings.Join(roleNames, ",") + ",",
 		}
 
-		processCPUInfo.With(labels).Set(float64(info.CPU.UsageCores))
+		processCPUInfo.With(labels).Set(info.CPU.UsageCores)
 
-		processDiskInfoBusy.With(labels).Set(float64(info.Disk.Busy))
+		processDiskInfoBusy.With(labels).Set(info.Disk.Busy)
 
 		processDiskInfoFreeBytes.With(labels).Set(float64(info.Disk.FreeBytes))
 
-		processDiskInfoReadHZ.With(labels).Set(float64(info.Disk.Reads.Hz))
+		processDiskInfoReadHZ.With(labels).Set(info.Disk.Reads.Hz)
 
-		processDiskInfoReadTotal.With(labels).Set(float64(info.Disk.Reads.Counter))
+		processDiskInfoReadTotal.With(labels).Set(info.Disk.Reads.Counter)
 
-		processDiskInfoWritesTotal.With(labels).Set(float64(info.Disk.Writes.Counter))
+		processDiskInfoWritesTotal.With(labels).Set(info.Disk.Writes.Counter)
 
-		processDiskInfoWriteHZ.With(labels).Set(float64(info.Disk.Writes.Hz))
+		processDiskInfoWriteHZ.With(labels).Set(info.Disk.Writes.Hz)
 
 		processMemoryInfoAvailableBytes.With(labels).Set(float64(info.Memory.AvailableBytes))
 
 		processMemoryInfoLimitBytes.With(labels).Set(float64(info.Memory.LimitBytes))
 
-		processMemoryInfoUnusedMemory.With(labels).Set(float64(info.Memory.UnusedAllocatedMemory))
+		processMemoryInfoUnusedMemory.With(labels).Set(info.Memory.UnusedAllocatedMemory)
 
-		processMemoryInfoUsedBytes.With(labels).Set(float64(info.Memory.UsedBytes))
+		processMemoryInfoUsedBytes.With(labels).Set(info.Memory.UsedBytes)
 
 		// network
-		processNetworkConnectionError.With(labels).Set(float64(info.Network.ConnectionErrors.Hz))
+		processNetworkConnectionError.With(labels).Set(info.Network.ConnectionErrors.Hz)
 
-		processNetworkConnectionsClosed.With(labels).Set(float64(info.Network.ConnectionsClosed.Hz))
+		processNetworkConnectionsClosed.With(labels).Set(info.Network.ConnectionsClosed.Hz)
 
-		processNetworkConnectionsEstablished.With(labels).Set(float64(info.Network.ConnectionsEstablished.Hz))
+		processNetworkConnectionsEstablished.With(labels).Set(info.Network.ConnectionsEstablished.Hz)
 
-		processNetworkCurrentConnections.With(labels).Set(float64(info.Network.CurrentConnections))
+		processNetworkCurrentConnections.With(labels).Set(info.Network.CurrentConnections)
 
-		processNetworkReceived.With(labels).Set(float64(info.Network.MegabitsReceived.Hz))
+		processNetworkReceived.With(labels).Set(info.Network.MegabitsReceived.Hz)
 
-		processNetworkSent.With(labels).Set(float64(info.Network.MegabitsSent.Hz))
+		processNetworkSent.With(labels).Set(info.Network.MegabitsSent.Hz)
 
 		for _, role := range info.Roles {
 			switch r := role.Value.(type) {
@@ -332,17 +332,17 @@ func (s FDBStatus) ExportProcesses() {
 					"id":           r.ID,
 					"role":         "," + r.Role + ",",
 				}
-				logRoleDataVersion.With(labels).Set(float64(r.DataVersion))
-				logRoleDurableBytesHZ.With(labels).Set(float64(r.DurableBytes.Hz))
-				logRoleDurableBytesCounter.With(labels).Set(float64(r.DurableBytes.Counter))
+				logRoleDataVersion.With(labels).Set(r.DataVersion)
+				logRoleDurableBytesHZ.With(labels).Set(r.DurableBytes.Hz)
+				logRoleDurableBytesCounter.With(labels).Set(r.DurableBytes.Counter)
 				logRoleAvailableBytes.With(labels).Set(float64(r.KvstoreAvailableBytes))
 				logRoleFreeBytes.With(labels).Set(float64(r.KvstoreFreeBytes))
 				logRoleTotalBytes.With(labels).Set(float64(r.KvstoreTotalBytes))
-				logRoleUsedBytes.With(labels).Set(float64(r.KvstoreUsedBytes))
+				logRoleUsedBytes.With(labels).Set(r.KvstoreUsedBytes)
 				logRoleQueueAvailableBytes.With(labels).Set(float64(r.QueueDiskAvailableBytes))
 				logRoleQueueFreeBytes.With(labels).Set(float64(r.QueueDiskFreeBytes))
 				logRoleQueueTotalBytes.With(labels).Set(float64(r.QueueDiskTotalBytes))
-				logRoleQueueUsedbytes.With(labels).Set(float64(r.QueueDiskUsedBytes))
+				logRoleQueueUsedbytes.With(labels).Set(r.QueueDiskUsedBytes)
 
 			case *DynamicStorageRole:
 				labels := prometheus.Labels{
@@ -354,32 +354,35 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         "," + r.Role + ",",
 				}
 
-				storageRoleBytesQueriedCounter.With(labels).Set(float64(r.BytesQueried.Counter))
-				storageRoleBytesQueriedHz.With(labels).Set(float64(r.BytesQueried.Hz))
-				storageRoleDataLagSeconds.With(labels).Set(float64(r.DataLag.Seconds))
-				storageRoleDataLagVersions.With(labels).Set(float64(r.DataLag.Versions))
-				logRoleDataVersion.With(labels).Set(float64(r.DataVersion))
-				logRoleDurableBytesHZ.With(labels).Set(float64(r.DurableBytes.Hz))
-				logRoleDurableBytesCounter.With(labels).Set(float64(r.DurableBytes.Counter))
-				storageRoleDurableVersions.With(labels).Set(float64(r.DurableVersion))
-				storageRoleFinishedQueriesCounter.With(labels).Set(float64(r.FinishedQueries.Counter))
-				storageRoleFinishedQueriesHz.With(labels).Set(float64(r.FinishedQueries.Hz))
-				storageRoleInputBytesCounter.With(labels).Set(float64(r.InputBytes.Counter))
-				storageRoleInputBytesHz.With(labels).Set(float64(r.InputBytes.Hz))
-				storageRoleKeysQueriedCounter.With(labels).Set(float64(r.KeysQueried.Counter))
-				storageRoleKeysQueriedHz.With(labels).Set(float64(r.KeysQueried.Hz))
+				storageRoleBytesQueriedCounter.With(labels).Set(r.BytesQueried.Counter)
+				storageRoleBytesQueriedHz.With(labels).Set(r.BytesQueried.Hz)
+				storageRoleDataLagSeconds.With(labels).Set(r.DataLag.Seconds)
+				storageRoleDataLagVersions.With(labels).Set(r.DataLag.Versions)
+				storageRoleDurabilityLagSeconds.With(labels).Set(r.DurabilityLag.Seconds)
+				storageRoleDurabilityLagVersions.With(labels).Set(r.DurabilityLag.Versions)
+
+				logRoleDataVersion.With(labels).Set(r.DataVersion)
+				logRoleDurableBytesHZ.With(labels).Set(r.DurableBytes.Hz)
+				logRoleDurableBytesCounter.With(labels).Set(r.DurableBytes.Counter)
+				storageRoleDurableVersions.With(labels).Set(r.DurableVersion)
+				storageRoleFinishedQueriesCounter.With(labels).Set(r.FinishedQueries.Counter)
+				storageRoleFinishedQueriesHz.With(labels).Set(r.FinishedQueries.Hz)
+				storageRoleInputBytesCounter.With(labels).Set(r.InputBytes.Counter)
+				storageRoleInputBytesHz.With(labels).Set(r.InputBytes.Hz)
+				storageRoleKeysQueriedCounter.With(labels).Set(r.KeysQueried.Counter)
+				storageRoleKeysQueriedHz.With(labels).Set(r.KeysQueried.Hz)
 				logRoleQueueAvailableBytes.With(labels).Set(float64(r.KvstoreAvailableBytes))
 				logRoleQueueFreeBytes.With(labels).Set(float64(r.KvstoreFreeBytes))
 				logRoleQueueTotalBytes.With(labels).Set(float64(r.KvstoreTotalBytes))
-				logRoleQueueUsedbytes.With(labels).Set(float64(r.KvstoreUsedBytes))
-				storageRoleMutationBytesHz.With(labels).Set(float64(r.MutationBytes.Hz))
-				storageRoleMutationsBytesCounter.With(labels).Set(float64(r.MutationBytes.Counter))
-				storageRoleMutationHz.With(labels).Set(float64(r.Mutations.Hz))
-				storageRoleMutationsCounter.With(labels).Set(float64(r.Mutations.Counter))
-				storageRoleQueryMaxQueue.With(labels).Set(float64(r.QueryQueueMax))
-				storageRoleStoredBytes.With(labels).Set(float64(r.StoredBytes))
-				storageRoleTotalQueriesCounter.With(labels).Set(float64(r.TotalQueries.Counter))
-				storageRoleTotalQueriesHz.With(labels).Set(float64(r.TotalQueries.Hz))
+				logRoleQueueUsedbytes.With(labels).Set(r.KvstoreUsedBytes)
+				storageRoleMutationBytesHz.With(labels).Set(r.MutationBytes.Hz)
+				storageRoleMutationsBytesCounter.With(labels).Set(r.MutationBytes.Counter)
+				storageRoleMutationHz.With(labels).Set(r.Mutations.Hz)
+				storageRoleMutationsCounter.With(labels).Set(r.Mutations.Counter)
+				storageRoleQueryMaxQueue.With(labels).Set(r.QueryQueueMax)
+				storageRoleStoredBytes.With(labels).Set(r.StoredBytes)
+				storageRoleTotalQueriesCounter.With(labels).Set(r.TotalQueries.Counter)
+				storageRoleTotalQueriesHz.With(labels).Set(r.TotalQueries.Hz)
 			default: // nothing to expose
 			}
 		}
