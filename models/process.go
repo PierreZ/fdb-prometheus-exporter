@@ -84,8 +84,8 @@ var (
 		Help: "process network established",
 	}, processLabels)
 
-	processNetworkCurrentConnection = prometheus.NewGaugeVec(prometheus.GaugeOpts{
-		Name: "fdb_processes_network_current_connections_per_second",
+	processNetworkCurrentConnections = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_network_current_connections",
 		Help: "process network current connections",
 	}, processLabels)
 
@@ -315,7 +315,7 @@ func (s FDBStatus) ExportProcesses() {
 
 		processNetworkConnectionsEstablished.With(labels).Set(float64(info.Network.ConnectionsEstablished.Hz))
 
-		processNetworkCurrentConnection.With(labels).Set(float64(info.Network.CurrentConnections))
+		processNetworkCurrentConnections.With(labels).Set(float64(info.Network.CurrentConnections))
 
 		processNetworkReceived.With(labels).Set(float64(info.Network.MegabitsReceived.Hz))
 
@@ -402,7 +402,7 @@ func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(processNetworkConnectionError)
 	r.MustRegister(processNetworkConnectionsClosed)
 	r.MustRegister(processNetworkConnectionsEstablished)
-	r.MustRegister(processNetworkCurrentConnection)
+	r.MustRegister(processNetworkCurrentConnections)
 	r.MustRegister(processNetworkReceived)
 	r.MustRegister(processNetworkSent)
 	r.MustRegister(logRoleAvailableBytes)
