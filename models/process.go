@@ -12,11 +12,11 @@ var allRoleMetrics []*prometheus.GaugeVec
 
 func ClearAll() {
 	for _, metric := range allProcessMetrics {
-		metric.DeleteLabelValues(processLabels...)
+		metric.Reset()
 	}
 
 	for _, metric := range allRoleMetrics {
-		metric.DeleteLabelValues(roleLabels...)
+		metric.Reset()
 	}
 }
 
