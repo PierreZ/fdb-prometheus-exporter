@@ -99,6 +99,16 @@ var (
 		Help: "Cluster degraded processes",
 	})
 
+	clusterFaultToleranceMaxZoneFailuresWithoutLosingAvailability = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "fdb_cluster_fault_tolerance_max_zone_failures_without_losing_availability",
+		Help: "Cluster fault tolerance max zone failures without losing availability",
+	})
+
+	clusterFaultToleranceMaxZoneFailuresWithoutLosingData = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "fdb_cluster_fault_tolerance_max_zone_failures_without_losing_data",
+		Help: "Cluster fault tolerance max zone failures without losing data",
+	})
+
 	clusterLatencyProbeBatchPriorityTransactionStartSeconds = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "fdb_cluster_latency_probe_batch_priority_transaction_start_seconds",
 		Help: "Cluster latency probe batch priority transaction start seconds",
@@ -161,6 +171,8 @@ func (s FDBStatus) ExportConfiguration() {
 	}
 
 	clusterDegradedProcesses.Set(s.Cluster.DegradedProcesses)
+	clusterFaultToleranceMaxZoneFailuresWithoutLosingAvailability.Set(s.Cluster.FaultTolerance.MaxZoneFailuresWithoutLosingAvailability)
+	clusterFaultToleranceMaxZoneFailuresWithoutLosingData.Set(s.Cluster.FaultTolerance.MaxZoneFailuresWithoutLosingData)
 	clusterLatencyProbeBatchPriorityTransactionStartSeconds.Set(s.Cluster.LatencyProbe.BatchPriorityTransactionStartSeconds)
 	clusterLatencyProbeCommitSeconds.Set(s.Cluster.LatencyProbe.CommitSeconds)
 	clusterLatencyProbeImmediatePriorityTransactionStartSeconds.Set(s.Cluster.LatencyProbe.ImmediatePriorityTransactionStartSeconds)
