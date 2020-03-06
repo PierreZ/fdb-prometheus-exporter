@@ -3,19 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/PierreZ/fdb-prometheus-exporter/models"
+	"github.com/apple/foundationdb/bindings/go/src/fdb"
+	"github.com/pkg/errors"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	dto "github.com/prometheus/client_model/go"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
-	"time"
-
-	"github.com/PierreZ/fdb-prometheus-exporter/models"
-	"github.com/apple/foundationdb/bindings/go/src/fdb"
-	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
@@ -67,46 +66,38 @@ func main() {
 	}
 
 	listenTo := getEnv("FDB_METRICS_LISTEN", ":8080")
-	refreshEvery, err := strconv.Atoi(getEnv("FDB_METRICS_EVERY", "10"))
-	if err != nil {
-		log.Fatal("cannot parse FDB_METRICS_EVERY from env")
-	}
-
-	ticker := time.NewTicker(time.Duration(refreshEvery) * time.Second)
-	go func() {
-		for range ticker.C {
-			//Call the periodic function here.
-			models, err := retrieveMetrics()
-			if err != nil {
-				fmt.Errorf("cannot retrieve metrics from FDB: (%v)", err)
-				continue
-			}
-
-			fmt.Println("retrieved data")
-
-			if exportWorkload {
-				models.ExportWorkload()
-			}
-
-			if exportDatabaseStatus {
-				models.ExportDatabaseStatus()
-			}
-
-			if exportConfiguration {
-				models.ExportConfiguration()
-			}
-
-			if exportProcesses {
-				models.ExportProcesses()
-			}
-		}
-	}()
 
 	r := prometheus.NewRegistry()
 	models.Register(r)
+	gather := func() ([]*dto.MetricFamily, error) {
+		mods, err := retrieveMetrics()
 
-	// [...] update metrics within a goroutine
-	handler := promhttp.HandlerFor(r, promhttp.HandlerOpts{})
+		if err != nil {
+			return nil, fmt.Errorf("cannot retrieve metrics from FDB: (%v)", err)
+		}
+
+		fmt.Println("retrieved data")
+
+		if exportWorkload {
+			mods.ExportWorkload()
+		}
+
+		if exportDatabaseStatus {
+			mods.ExportDatabaseStatus()
+		}
+
+		if exportConfiguration {
+			mods.ExportConfiguration()
+		}
+
+		if exportProcesses {
+			mods.ExportProcesses()
+		}
+
+		return r.Gather()
+	}
+
+	handler := promhttp.HandlerFor(prometheus.GathererFunc(gather), promhttp.HandlerOpts{})
 	http.Handle("/metrics", handler)
 
 	log.Fatal(http.ListenAndServe(listenTo, nil))
