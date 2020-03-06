@@ -2,6 +2,27 @@ package models
 
 import "github.com/prometheus/client_golang/prometheus"
 
+var storageEngineMap = map[string]float64{
+	"ssd": 0,
+	"ssd-1": 1,
+	"ssd-2": 2,
+	"ssd-redwood-experimental": 3,
+	"memory": 4,
+	"memory-1": 5,
+	"memory-2": 6,
+	"memory-radixtree-beta": 7,
+}
+
+var redundancyModeMap = map[string]float64 {
+	"single": 0,
+	"double": 1,
+	"triple": 2,
+	"three_datacenter": 3,
+	"three_datacenter_fallback": 4,
+	"three_data_hall": 5,
+	"three_data_hall_fallback": 6,
+}
+
 var (
 	clientsCount = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "fdb_cluster_clients_count",
@@ -112,7 +133,6 @@ var (
 		Name: "fdb_cluster_generation",
 		Help: "Generation of the fdb",
 	})
-
 )
 
 // ExportConfiguration is exporting the configuration
@@ -174,6 +194,14 @@ func (s FDBStatus) ExportConfiguration() {
 	configurationStatus.With(prometheus.Labels{
 		"component": "usable_regions",
 	}).Set(s.Cluster.Configuration.UsableRegions)
+
+	configurationStatus.With(prometheus.Labels{
+		"component": "redundancy_mode",
+	}).Set(redundancyModeMap[s.Cluster.Configuration.RedundancyMode])
+
+	configurationStatus.With(prometheus.Labels{
+		"component": "storage_engine",
+	}).Set(redundancyModeMap[s.Cluster.Configuration.StorageEngine])
 
 	generation.Set(s.Cluster.Generation)
 }
