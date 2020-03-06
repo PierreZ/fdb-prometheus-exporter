@@ -201,7 +201,7 @@ func (s FDBStatus) ExportConfiguration() {
 
 	configurationStatus.With(prometheus.Labels{
 		"component": "storage_engine",
-	}).Set(redundancyModeMap[s.Cluster.Configuration.StorageEngine])
+	}).Set(storageEngineMap[s.Cluster.Configuration.StorageEngine])
 
 	generation.Set(s.Cluster.Generation)
 }
