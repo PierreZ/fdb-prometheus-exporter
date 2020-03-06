@@ -234,6 +234,8 @@ func registerConfiguration(r *prometheus.Registry) {
 	r.MustRegister(clusterTotalKvSizeBytes)
 	r.MustRegister(clusterDatabaseLocked)
 	r.MustRegister(clusterDegradedProcesses)
+	r.MustRegister(clusterFaultToleranceMaxZoneFailuresWithoutLosingAvailability)
+	r.MustRegister(clusterFaultToleranceMaxZoneFailuresWithoutLosingData)
 	r.MustRegister(clusterLatencyProbeBatchPriorityTransactionStartSeconds)
 	r.MustRegister(clusterLatencyProbeCommitSeconds)
 	r.MustRegister(clusterLatencyProbeImmediatePriorityTransactionStartSeconds)
