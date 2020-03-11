@@ -58,6 +58,11 @@ var (
 		Help: "process disk",
 	})
 
+	processDiskInfoReadSectors = NewProcessGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_reads_sectors",
+		Help: "process disk reads sectors",
+	})
+
 	processDiskInfoTotalBytes = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_total_bytes",
 		Help: "process disk",
@@ -66,6 +71,11 @@ var (
 	processDiskInfoWriteHZ = NewProcessGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_writes_per_second",
 		Help: "process disk",
+	})
+
+	processDiskInfoWriteSectors = NewProcessGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_disk_writes_sectors",
+		Help: "process disk writes sectors",
 	})
 
 	processDiskInfoWritesTotal = NewProcessGaugeVec(prometheus.GaugeOpts{
@@ -316,15 +326,21 @@ func (s FDBStatus) ExportProcesses() {
 
 		processDiskInfoBusy.With(labels).Set(info.Disk.Busy)
 
+		processDiskInfoTotalBytes.With(labels).Set(float64(info.Disk.TotalBytes))
+
 		processDiskInfoFreeBytes.With(labels).Set(float64(info.Disk.FreeBytes))
 
 		processDiskInfoReadHZ.With(labels).Set(info.Disk.Reads.Hz)
 
 		processDiskInfoReadTotal.With(labels).Set(info.Disk.Reads.Counter)
 
+		processDiskInfoReadSectors.With(labels).Set(info.Disk.Reads.Sectors)
+
 		processDiskInfoWritesTotal.With(labels).Set(info.Disk.Writes.Counter)
 
 		processDiskInfoWriteHZ.With(labels).Set(info.Disk.Writes.Hz)
+
+		processDiskInfoWriteSectors.With(labels).Set(info.Disk.Writes.Sectors)
 
 		processMemoryInfoAvailableBytes.With(labels).Set(float64(info.Memory.AvailableBytes))
 
