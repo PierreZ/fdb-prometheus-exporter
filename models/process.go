@@ -319,7 +319,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
-			"role":         "," + strings.Join(roleNames, ",") + ",",
+			"role":         strings.Join(roleNames, ","),
 		}
 
 		processCPUInfo.With(labels).Set(info.CPU.UsageCores)
@@ -372,7 +372,7 @@ func (s FDBStatus) ExportProcesses() {
 					"address":      info.Address,
 					"fault_domain": info.FaultDomain,
 					"id":           r.ID,
-					"role":         "," + r.Role + ",",
+					"role":         r.Role,
 				}
 				logRoleDataVersion.With(labels).Set(r.DataVersion)
 				logRoleDurableBytesHZ.With(labels).Set(r.DurableBytes.Hz)
@@ -393,7 +393,7 @@ func (s FDBStatus) ExportProcesses() {
 					"address":      info.Address,
 					"fault_domain": info.FaultDomain,
 					"id":           r.ID,
-					"role":         "," + r.Role + ",",
+					"role":         r.Role,
 				}
 
 				storageRoleBytesQueriedCounter.With(labels).Set(r.BytesQueried.Counter)
