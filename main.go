@@ -24,7 +24,7 @@ var (
 
 func main() {
 
-	apiVersion, err := strconv.Atoi(getEnv("FDB_API_VERSION", "620"))
+	apiVersion, err := strconv.Atoi(getEnv("FDB_API_VERSION", "630"))
 	if err != nil {
 		log.Fatal("cannot parse FDB_API_VERSION from env")
 	}
