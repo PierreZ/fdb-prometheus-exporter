@@ -1,4 +1,4 @@
-ARG FDB_VERSION=6.2.11
+ARG FDB_VERSION=6.3.13
 FROM foundationdb/foundationdb:${FDB_VERSION} as fdb
 FROM golang:1.13.6-stretch
 ARG FDB_VERSION
