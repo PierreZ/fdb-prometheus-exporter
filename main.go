@@ -140,7 +140,7 @@ func getEnv(key, fallback string) string {
 }
 
 func createClusterFile() {
-	cmd := exec.Command("/create_cluster_file.bash")
+	cmd := exec.Command("/fdb.bash")
 
 	fmt.Printf("Running command 'create_cluster_file' and waiting for it to finish...\n")
 	stdoutStderr, err := cmd.CombinedOutput()
