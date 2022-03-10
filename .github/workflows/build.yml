@@ -1,14 +1,42 @@
-name: Build
+name: AWS ECR Push
 
-on: [push]
+on:
+  push:
+    branches: ["master"]
+
+env:
+  AWS_REGION: "us-east-1"
+  AWS_ACCOUNT_ID: "231290928314" # publishing
+  IAM_ROLE_NAME: "github-actions-publishing"
+  ECR_REPO_NAME: "fdb-prometheus-exporter"
 
 jobs:
-
-  build:
-
+  build-push-container:
     runs-on: ubuntu-latest
 
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.IAM_ROLE_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG . -f Dockerfile
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG
