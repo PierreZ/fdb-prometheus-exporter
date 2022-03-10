@@ -1,0 +1,59 @@
+name: AWS ECR Push release
+
+on:
+  release:
+    types: [published]
+
+env:
+  AWS_REGION: "us-east-1"
+  AWS_ACCOUNT_ID: "231290928314" # publishing
+  IAM_ROLE_NAME: "github-actions-publishing"
+  ECR_REPO_NAME: "fdb-prometheus-exporter"
+
+jobs:
+  build-push-container:
+    runs-on: ubuntu-latest
+
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.IAM_ROLE_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ steps.get_release.outputs.tag_name }}
+        run: |
+          docker build -t ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG . -f Dockerfile
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG
+
+          echo "::set-output name=image:: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG"
+
+      - name: Update release message with link to image repository
+        uses: tubone24/update_release@v1.0
+        id: update-release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          isAppendBody: true
+          body: ${{ steps.build-image.outputs.image }}
