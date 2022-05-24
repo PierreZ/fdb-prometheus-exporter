@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 82,
-  "iteration": 1653385977872,
+  "iteration": 1653388615977,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -202,7 +202,7 @@
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
+      "title": "Cluster State",
       "type": "timeseries"
     },
     {
@@ -279,7 +279,7 @@
           "exemplar": true,
           "expr": "increase(fdb_generation{app_kubernetes_io_name=\"$release_name\", app_kubernetes_io_namespace=\"$namespace\"}[1d])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "generation",
           "refId": "A"
         }
       ],
@@ -1051,7 +1051,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 22
+            "y": 5
           },
           "id": 32,
           "options": {
@@ -1133,7 +1133,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 22
+            "y": 5
           },
           "id": 36,
           "options": {
@@ -1161,6 +1161,552 @@
       ],
       "title": "Queue Disk",
       "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 38,
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 23
+          },
+          "id": 42,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "avg(kube_pod_container_resource_requests_memory_bytes{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"})",
+              "interval": "",
+              "legendFormat": "request",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "avg(kube_pod_container_resource_limits_memory_bytes{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"})",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "limits",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "max(container_memory_working_set_bytes{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"}) by(pod)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{pod}}",
+              "refId": "C"
+            }
+          ],
+          "title": "Memory Usage",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 23
+          },
+          "id": 44,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "avg(kube_pod_container_resource_requests_cpu_cores{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"})",
+              "interval": "",
+              "legendFormat": "requests",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "avg(kube_pod_container_resource_limits_cpu_cores{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"})",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "limits",
+              "refId": "B"
+            },
+            {
+              "exemplar": true,
+              "expr": "max(sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\",pod=~\"$release_name-$fdb_class.*\"}[5m])) by (pod)) by (pod)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{ pod }}",
+              "refId": "C"
+            }
+          ],
+          "title": "CPU Usage",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 16,
+            "y": 23
+          },
+          "id": 52,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum(irate(container_network_receive_bytes_total{namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval])) by (pod) + sum(irate(container_network_transmit_bytes_total{namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval])) by (pod)",
+              "interval": "",
+              "legendFormat": "{{ pod }}",
+              "refId": "A"
+            }
+          ],
+          "title": "RT Bandwidth",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 31
+          },
+          "id": 54,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "ceil(sum by(pod) (rate(container_fs_reads_total{container!=\"\",namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval]) + rate(container_fs_writes_total{container!=\"\",namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval])))",
+              "interval": "",
+              "legendFormat": "{{ pod }}",
+              "refId": "A"
+            }
+          ],
+          "title": "IOPS R+W",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 31
+          },
+          "id": 56,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum by(pod) (rate(container_fs_reads_bytes_total{container!=\"\", namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{container!=\"\",namespace=\"$namespace\", pod=~\"$release_name-$fdb_class.*\"}[$__rate_interval]))",
+              "interval": "",
+              "legendFormat": "{{ pod }}",
+              "refId": "A"
+            }
+          ],
+          "title": "IO Throughput",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 16,
+            "y": 31
+          },
+          "id": 58,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "(kubelet_volume_stats_capacity_bytes{namespace=\"$namespace\",persistentvolumeclaim=~\"$release_name-$fdb_class.*\"} - kubelet_volume_stats_available_bytes{namespace=\"$namespace\",persistentvolumeclaim=~\"$release_name-$fdb_class.*\"})",
+              "interval": "",
+              "legendFormat": "{{ persistentvolumeclaim }}",
+              "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "avg(kubelet_volume_stats_capacity_bytes{namespace=\"$namespace\",persistentvolumeclaim=~\"$release_name-$fdb_class.*\"})",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "total",
+              "refId": "B"
+            }
+          ],
+          "title": "Volume Usage",
+          "type": "timeseries"
+        }
+      ],
+      "repeat": "fdb_class",
+      "title": "Pod class $fdb_class",
+      "type": "row"
     }
   ],
   "schemaVersion": 31,
@@ -1171,7 +1717,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "infra",
           "value": "infra"
         },
@@ -1221,16 +1767,61 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "fdb_class",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "log",
+            "value": "log"
+          },
+          {
+            "selected": false,
+            "text": "storage",
+            "value": "storage"
+          },
+          {
+            "selected": false,
+            "text": "stateless",
+            "value": "stateless"
+          }
+        ],
+        "query": "log,storage,stateless",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "FDB",
   "uid": "8P3ThCunk",
-  "version": 5
+  "version": 9
 }
