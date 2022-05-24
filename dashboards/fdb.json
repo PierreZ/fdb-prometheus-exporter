@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 82,
-  "iteration": 1653384731535,
+  "iteration": 1653385977872,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -531,7 +531,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(fdb_processes_disk_reads_total{}[1m])) by(address)",
+              "expr": "sum(rate(fdb_processes_disk_reads_total{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}[1m])) by(address)",
               "interval": "",
               "legendFormat": "{{address}}",
               "refId": "A"
@@ -541,7 +541,7 @@
           "type": "timeseries"
         },
         {
-          "datasource": null,
+          "datasource": "Prometheus",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -612,7 +612,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(fdb_processes_disk_writes_total{}[5m])) by(address)",
+              "expr": "sum(rate(fdb_processes_disk_writes_total{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}[5m])) by(address)",
               "interval": "",
               "legendFormat": "{{ address }}",
               "refId": "A"
@@ -637,7 +637,7 @@
       "id": 12,
       "panels": [
         {
-          "datasource": null,
+          "datasource": "Prometheus",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -693,7 +693,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 2
+            "y": 11
           },
           "id": 8,
           "options": {
@@ -709,9 +709,9 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(fdb_processes_memory_used_bytes) by(address) / sum(fdb_processes_memory_available_bytes) by(address,role)",
+              "expr": "sum(fdb_processes_memory_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}) by(address,role) / sum(fdb_processes_memory_available_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}) by(address,role)",
               "interval": "",
-              "legendFormat": "{{ address }}|{{ role }}",
+              "legendFormat": "{{ address }}",
               "refId": "A"
             }
           ],
@@ -775,7 +775,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 2
+            "y": 11
           },
           "id": 6,
           "options": {
@@ -791,7 +791,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(fdb_processes_memory_used_bytes{}) by(address)",
+              "expr": "sum(fdb_processes_memory_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}) by(address)",
               "interval": "",
               "legendFormat": "{{address}}",
               "refId": "A"
@@ -872,7 +872,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 1
+            "y": 4
           },
           "id": 28,
           "options": {
@@ -888,7 +888,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "fdb_processes_kvstore_used_bytes{} > 0",
+              "expr": "fdb_processes_kvstore_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"} > 0",
               "interval": "",
               "legendFormat": "{{ address }}",
               "refId": "A"
@@ -954,7 +954,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 1
+            "y": 4
           },
           "id": 30,
           "options": {
@@ -970,7 +970,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "(fdb_processes_kvstore_used_bytes{} / fdb_processes_kvstore_total_bytes{}) > 0",
+              "expr": "(fdb_processes_kvstore_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"} / fdb_processes_kvstore_total_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}) > 0",
               "interval": "",
               "legendFormat": "{{ address }}",
               "refId": "A"
@@ -1051,7 +1051,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 1
+            "y": 22
           },
           "id": 32,
           "options": {
@@ -1067,7 +1067,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "fdb_processes_queue_disk_used_bytes{} > 0",
+              "expr": "fdb_processes_queue_disk_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"} > 0",
               "interval": "",
               "legendFormat": "{{ address }} | {{ role }}",
               "refId": "A"
@@ -1133,7 +1133,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 1
+            "y": 22
           },
           "id": 36,
           "options": {
@@ -1149,7 +1149,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "fdb_processes_queue_disk_used_bytes{} / fdb_processes_queue_disk_total_bytes{}",
+              "expr": "fdb_processes_queue_disk_used_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"} / fdb_processes_queue_disk_total_bytes{app_kubernetes_io_name=\"$release_name\",app_kubernetes_io_namespace=\"$namespace\"}",
               "interval": "",
               "legendFormat": "{{ address }} | {{ role }}",
               "refId": "A"
@@ -1232,5 +1232,5 @@
   "timezone": "",
   "title": "FDB",
   "uid": "8P3ThCunk",
-  "version": 2
+  "version": 5
 }
