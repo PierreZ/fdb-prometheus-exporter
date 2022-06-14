@@ -9,6 +9,10 @@ var (
 		Name: "fdb_database_status",
 		Help: "state of the dabase",
 	}, []string{"state"})
+
+	numConnectedClients = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "fdb_connected_clients",
+		Help: "number of connected clients"})
 )
 
 // ExportDatabaseStatus is exporting the status of the database
@@ -23,6 +27,8 @@ func (s FDBStatus) ExportDatabaseStatus() {
 	databaseStatus.With(prometheus.Labels{
 		"state": "quorum_reachable",
 	}).Set(boolToNumber(s.Client.Coordinators.QuorumReachable))
+
+	numConnectedClients.Set(s.Cluster.Clients.Count)
 }
 
 func registerDatabaseStatus(r *prometheus.Registry) {
