@@ -8,92 +8,92 @@ var (
 	processCPUInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_cpu_usage_cores",
 		Help: "process cpu",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoBusy = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_busy",
 		Help: "process disk busy",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoFreeBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_free_bytes",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoReadHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_reads_per_second",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoReadTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_reads_total",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoTotalBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_total_bytes",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoWriteHZ = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_writes_per_second",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processDiskInfoWritesTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_disk_writes_total",
 		Help: "process disk",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processMemoryInfoAvailableBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_available_bytes",
 		Help: "process memory available_bytes",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processMemoryInfoLimitBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_limit_bytes",
 		Help: "process memory info",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processMemoryInfoUnusedMemory = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_unused_allocated_memory",
 		Help: "process memory info",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processMemoryInfoUsedBytes = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_memory_used_bytes",
 		Help: "process memory info",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkConnectionError = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_errors_per_second",
 		Help: "process network errors",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkConnectionsClosed = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_closed_per_second",
 		Help: "process network closed",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkConnectionsEstablished = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_connection_established_per_second",
 		Help: "process network established",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkCurrentConnection = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_current_connections_per_second",
 		Help: "process netcowrk current connections",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkReceived = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_megabits_received_per_second",
 		Help: "process netcowrk mega bit",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	processNetworkSent = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_network_megabits_sent_per_second",
 		Help: "process netcowrk current connections",
-	}, []string{"process_id", "machine_id", "address", "fault_domain"})
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "classtype"})
 
 	logRoleDataVersion = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "fdb_processes_data_version",
@@ -254,16 +254,23 @@ var (
 		Name: "fdb_processes_storage_stored_bytes",
 		Help: "process storage bytes_queried",
 	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "role"})
+
+	storageRoleReadLatency = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "fdb_processes_storage_read_latency",
+		Help: "read latency of storage process",
+	}, []string{"process_id", "machine_id", "address", "fault_domain", "id", "percentile"})
 )
 
 // ExportProcesses is exporting the configuration
 func (s FDBStatus) ExportProcesses() {
 	for process, info := range s.Cluster.Processes {
+
 		processCPUInfo.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.CPU.UsageCores))
 
 		processDiskInfoBusy.With(prometheus.Labels{
@@ -271,6 +278,7 @@ func (s FDBStatus) ExportProcesses() {
 			"process_id":   process,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.Busy))
 
 		processDiskInfoFreeBytes.With(prometheus.Labels{
@@ -278,6 +286,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.FreeBytes))
 
 		processDiskInfoReadHZ.With(prometheus.Labels{
@@ -285,6 +294,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.Reads.Hz))
 
 		processDiskInfoReadTotal.With(prometheus.Labels{
@@ -292,6 +302,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.Reads.Counter))
 
 		processDiskInfoWritesTotal.With(prometheus.Labels{
@@ -299,6 +310,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.Writes.Counter))
 
 		processDiskInfoWriteHZ.With(prometheus.Labels{
@@ -306,6 +318,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Disk.Writes.Hz))
 
 		processMemoryInfoAvailableBytes.With(prometheus.Labels{
@@ -313,6 +326,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Memory.AvailableBytes))
 
 		processMemoryInfoLimitBytes.With(prometheus.Labels{
@@ -320,6 +334,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Memory.LimitBytes))
 
 		processMemoryInfoUnusedMemory.With(prometheus.Labels{
@@ -327,6 +342,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Memory.UnusedAllocatedMemory))
 
 		processMemoryInfoUsedBytes.With(prometheus.Labels{
@@ -334,6 +350,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Memory.UsedBytes))
 
 		// network
@@ -342,6 +359,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.ConnectionErrors.Hz))
 
 		processNetworkConnectionsClosed.With(prometheus.Labels{
@@ -349,6 +367,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.ConnectionsClosed.Hz))
 
 		processNetworkConnectionsEstablished.With(prometheus.Labels{
@@ -356,6 +375,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.ConnectionsEstablished.Hz))
 
 		processNetworkCurrentConnection.With(prometheus.Labels{
@@ -363,6 +383,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.CurrentConnections))
 
 		processNetworkReceived.With(prometheus.Labels{
@@ -370,6 +391,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.MegabitsReceived.Hz))
 
 		processNetworkSent.With(prometheus.Labels{
@@ -377,6 +399,7 @@ func (s FDBStatus) ExportProcesses() {
 			"machine_id":   info.Locality.Machineid,
 			"address":      info.Address,
 			"fault_domain": info.FaultDomain,
+			"classtype":    info.ClassType,
 		}).Set(float64(info.Network.MegabitsSent.Hz))
 
 		for _, role := range info.Roles {
@@ -712,6 +735,44 @@ func (s FDBStatus) ExportProcesses() {
 					"id":           r.ID,
 					"role":         r.Role,
 				}).Set(float64(r.TotalQueries.Hz))
+
+				// Read latency percentile
+				storageRoleReadLatency.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"percentile":   "50",
+				}).Set(r.ReadLatencyStatistics.Percentile50)
+
+				storageRoleReadLatency.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"percentile":   "90",
+				}).Set(r.ReadLatencyStatistics.Percentile90)
+
+				storageRoleReadLatency.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"percentile":   "99",
+				}).Set(r.ReadLatencyStatistics.Percentile99)
+
+				storageRoleReadLatency.With(prometheus.Labels{
+					"process_id":   process,
+					"machine_id":   info.Locality.Machineid,
+					"address":      info.Address,
+					"fault_domain": info.FaultDomain,
+					"id":           r.ID,
+					"percentile":   "99.9",
+				}).Set(r.ReadLatencyStatistics.Percentile999)
+
 			default: // nothing to expose
 			}
 		}
@@ -770,4 +831,5 @@ func registerProcesses(r *prometheus.Registry) {
 	r.MustRegister(storageRoleStoredBytes)
 	r.MustRegister(storageRoleTotalQueriesCounter)
 	r.MustRegister(storageRoleTotalQueriesHz)
+	r.MustRegister(storageRoleReadLatency)
 }

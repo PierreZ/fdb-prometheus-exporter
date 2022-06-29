@@ -430,6 +430,12 @@ type DynamicStorageRole struct {
 		Hz        float64 `json:"hz"`
 		Roughness float64 `json:"roughness"`
 	} `json:"total_queries"`
+	ReadLatencyStatistics struct {
+		Percentile50  float64 `json:"median"`
+		Percentile90  float64 `json:"p90"`
+		Percentile99  float64 `json:"p99"`
+		Percentile999 float64 `json:"p99.9"`
+	} `json:"read_latency_statistics"`
 }
 
 // DynamicLogRole contains details about the Role log
