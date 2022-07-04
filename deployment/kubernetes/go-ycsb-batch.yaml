@@ -21,43 +21,45 @@ spec:
       containers:
 
       - name: fdb-workloada
-        image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloada", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        image: 231290928314.dkr.ecr.us-east-1.amazonaws.com/fdb-prometheus-exporter:goycsb
+        # This is the command i used to spawn lots of threads
+        #command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloada", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620", "-p", "operationcount=1000000", "-p", "insertproportion=1", "-p", "readproportion=0", "-p", "updateproportion=0", "-p", "threadcount=10"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloada", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
       
       - name: fdb-workloadb
         image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloadb", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloadb", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
 
       - name: fdb-workloadc
         image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloadc", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloadc", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
 
       - name: fdb-workloadd
         image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloadd", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloadd", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
 
       - name: fdb-workloade
         image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloade", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloade", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
 
       - name: fdb-workloadf
         image: pierrezemb/go-ycsb:fdb-6.2.11
-        command: [ "/go-ycsb", "run", "basic", "-P", "workloads/workloadf", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
+        command: [ "/go-ycsb", "run", "foundationdb", "-P", "workloads/workloadf", "-p", "fdb.cluster=/mnt/config-volume/cluster-file", "-p", "fdb.apiversion=620"]
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config-volume
