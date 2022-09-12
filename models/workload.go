@@ -75,10 +75,10 @@ func (s FDBStatus) ExportWorkload() {
 	// reads
 	workloadOperationCounter.With(prometheus.Labels{
 		"operation": "writes",
-	}).Set(s.Cluster.Workload.Operations.Reads.Counter)
+	}).Set(s.Cluster.Workload.Operations.Writes.Counter)
 	workloadOperationCounter.With(prometheus.Labels{
 		"operation": "reads",
-	}).Set(s.Cluster.Workload.Operations.Writes.Counter)
+	}).Set(s.Cluster.Workload.Operations.Reads.Counter)
 
 	// commited transactions
 	workloadTransactionHZ.With(prometheus.Labels{
