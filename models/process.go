@@ -280,6 +280,13 @@ func (s FDBStatus) ExportProcesses() {
 			"fault_domain": info.FaultDomain,
 		}).Set(float64(info.Disk.FreeBytes))
 
+		processDiskInfoTotalBytes.With(prometheus.Labels{
+			"process_id":   process,
+			"machine_id":   info.Locality.Machineid,
+			"address":      info.Address,
+			"fault_domain": info.FaultDomain,
+		}).Set(float64(info.Disk.TotalBytes))
+
 		processDiskInfoReadHZ.With(prometheus.Labels{
 			"process_id":   process,
 			"machine_id":   info.Locality.Machineid,
@@ -605,7 +612,7 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.KeysQueried.Hz))
 
-				logRoleQueueAvailableBytes.With(prometheus.Labels{
+				logRoleAvailableBytes.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
@@ -614,7 +621,7 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.KvstoreAvailableBytes))
 
-				logRoleQueueFreeBytes.With(prometheus.Labels{
+				logRoleFreeBytes.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
@@ -623,7 +630,7 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.KvstoreFreeBytes))
 
-				logRoleQueueTotalBytes.With(prometheus.Labels{
+				logRoleTotalBytes.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
@@ -632,7 +639,7 @@ func (s FDBStatus) ExportProcesses() {
 					"role":         r.Role,
 				}).Set(float64(r.KvstoreTotalBytes))
 
-				logRoleQueueUsedbytes.With(prometheus.Labels{
+				logRoleUsedBytes.With(prometheus.Labels{
 					"process_id":   process,
 					"machine_id":   info.Locality.Machineid,
 					"address":      info.Address,
